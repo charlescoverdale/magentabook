@@ -134,6 +134,11 @@ print.mb_did <- function(x, ...) {
   cli::cli_text("95% CI: [{.val {cil_str}}, {.val {cih_str}}]")
   cli::cli_text("p-value: {.val {p_str}}")
   cli::cli_text("N = {.val {x$n}}, df = {.val {x$df}}")
+  if (!isTRUE(x$quiet)) {
+    cli::cli_alert_info(
+      "Canonical 2x2 DiD. For staggered adoption or heterogeneous effects, use {.pkg fixest} or {.pkg did}."
+    )
+  }
   invisible(x)
 }
 
@@ -164,20 +169,32 @@ print.mb_its <- function(x, ...) {
   cli::cli_text("Level change: {.val {level_str}} (SE {.val {level_se}})")
   cli::cli_text("Slope change: {.val {slope_str}} (SE {.val {slope_se}})")
   cli::cli_text("N = {.val {x$n}} (pre: {.val {x$n_pre}}, post: {.val {x$n_post}})")
+  if (!isTRUE(x$quiet)) {
+    cli::cli_alert_info(
+      "Single-group segmented regression with OLS SEs. For autocorrelated series use {.pkg sandwich} (Newey-West) or {.pkg nlme} / {.pkg forecast} (ARIMA-error)."
+    )
+  }
   invisible(x)
 }
 
 #' @export
 print.mb_event_study <- function(x, ...) {
+  se_label <- if (isTRUE(x$cluster_robust)) "cluster-robust" else "OLS"
   cli::cli_h1("Event study")
   cli::cli_text("Treatment at: {.val {x$treatment_time}}")
   cli::cli_text("Units: {.val {x$n_units}}, periods: {.val {x$n_periods}}, N = {.val {x$n}}")
+  cli::cli_text("SE: {se_label}")
   df <- data.frame(
     event_time = x$event_time,
     estimate   = x$estimate,
     se         = x$se
   )
   print(df, row.names = FALSE)
+  if (!isTRUE(x$quiet)) {
+    cli::cli_alert_info(
+      "Fixed-treatment-time event study. For staggered adoption use {.pkg fixest} sunab() or the {.pkg did} package (Callaway-Sant'Anna)."
+    )
+  }
   invisible(x)
 }
 
@@ -237,6 +254,24 @@ print.mb_contribution_claim <- function(x, ...) {
     cli::cli_h2("Evidence against ({.val {length(x$evidence_against)}})")
     for (e in x$evidence_against) cli::cli_bullets(c("x" = e))
   }
+  invisible(x)
+}
+
+#' @export
+print.mb_balance_table <- function(x, ...) {
+  thr <- attr(x, "threshold") %||% 0.10
+  n_imb <- sum(x$imbalanced, na.rm = TRUE)
+  cli::cli_h1("Pre-treatment balance ({nrow(x)} covariate{if (nrow(x) != 1L) 's' else ''})")
+  cli::cli_text("|SMD| threshold: {.val {thr}}")
+  cli::cli_text("Imbalanced rows: {.val {n_imb}} of {.val {nrow(x)}}")
+  display <- x
+  display$mean_treated <- round(display$mean_treated, 3)
+  display$mean_control <- round(display$mean_control, 3)
+  display$sd_treated   <- round(display$sd_treated, 3)
+  display$sd_control   <- round(display$sd_control, 3)
+  display$smd          <- round(display$smd, 3)
+  display$p_value      <- round(display$p_value, 4)
+  print(as.data.frame(display), row.names = FALSE)
   invisible(x)
 }
 

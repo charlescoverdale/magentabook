@@ -12,6 +12,10 @@
 #'   considered post-intervention.
 #' @param lag Integer >= 0. Number of pre-intervention observations
 #'   to drop near the intervention (transition period). Default `0`.
+#' @param quiet Logical. If `FALSE` (default), the print method
+#'   appends a one-line reminder that this is a single-group
+#'   segmented regression and points to specialist tooling for
+#'   autocorrelation correction. Set to `TRUE` to suppress.
 #'
 #' @return An `mb_its` object: a list with `coefficients` (named
 #'   numeric), `se` (named numeric), `level_change`, `slope_change`,
@@ -43,7 +47,7 @@
 #' time <- 1:48
 #' y    <- 10 + 0.05 * time + ifelse(time >= 25, 2 + 0.1 * (time - 25), 0) + rnorm(48, sd = 0.5)
 #' mb_its(y, time, intervention_time = 25)
-mb_its <- function(y, time, intervention_time, lag = 0L) {
+mb_its <- function(y, time, intervention_time, lag = 0L, quiet = FALSE) {
   validate_numeric(y,    arg = "y")
   validate_numeric(time, arg = "time")
   if (length(y) != length(time)) {
@@ -89,6 +93,7 @@ mb_its <- function(y, time, intervention_time, lag = 0L) {
     n                 = n,
     n_pre             = sum(P == 0),
     n_post            = sum(P == 1),
+    quiet             = isTRUE(quiet),
     vintage           = .mb_vintage()
   )
   class(out) <- c("mb_its", "list")

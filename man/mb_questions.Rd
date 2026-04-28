@@ -37,6 +37,7 @@ mb_questions(
 \code{\link[=mb_evaluation_plan]{mb_evaluation_plan()}}, \code{\link[=mb_schedule_table]{mb_schedule_table()}}.
 
 Other planning: 
+\code{\link{mb_balance_table}()},
 \code{\link{mb_counterfactual}()},
 \code{\link{mb_evaluation_plan}()},
 \code{\link{mb_stakeholders}()}

@@ -14,10 +14,14 @@
 #'   correction). If `NULL`, conventional OLS SEs are returned.
 #' @param alpha Numeric in `(0, 1)`. Significance level for the
 #'   confidence interval. Default `0.05`.
+#' @param quiet Logical. If `FALSE` (default), the print method
+#'   appends a one-line reminder that this is a canonical 2x2 DiD
+#'   and points to specialist tooling for staggered adoption or
+#'   heterogeneous treatment effects. Set to `TRUE` to suppress.
 #'
 #' @return An `mb_did` object: a list with `estimate`, `se`,
 #'   `t_stat`, `p_value`, `ci_low`, `ci_high`, group means,
-#'   `cluster_robust`, `n`, and `vintage`.
+#'   `cluster_robust`, `n`, `quiet`, and `vintage`.
 #'
 #' @details
 #' Computes
@@ -53,7 +57,8 @@
 #' post    <- rep(c(0, 1), times = n / 2)
 #' y       <- 0.5 * treated + 0.2 * post + 0.4 * treated * post + rnorm(n)
 #' mb_did_2x2(y, treated, post)
-mb_did_2x2 <- function(y, treated, post, cluster = NULL, alpha = 0.05) {
+mb_did_2x2 <- function(y, treated, post, cluster = NULL, alpha = 0.05,
+                       quiet = FALSE) {
   validate_numeric(y, arg = "y")
   if (length(treated) != length(y)) {
     cli::cli_abort("{.arg treated} must be the same length as {.arg y}.")
@@ -133,6 +138,7 @@ mb_did_2x2 <- function(y, treated, post, cluster = NULL, alpha = 0.05) {
     group_means    = group_means,
     cluster_robust = cluster_robust,
     n              = n,
+    quiet          = isTRUE(quiet),
     vintage        = .mb_vintage()
   )
   class(out) <- c("mb_did", "list")

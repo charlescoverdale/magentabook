@@ -4,7 +4,7 @@
 \alias{mb_its}
 \title{Interrupted time series via segmented regression}
 \usage{
-mb_its(y, time, intervention_time, lag = 0L)
+mb_its(y, time, intervention_time, lag = 0L, quiet = FALSE)
 }
 \arguments{
 \item{y}{Numeric vector of outcomes ordered by \code{time}.}
@@ -16,6 +16,11 @@ considered post-intervention.}
 
 \item{lag}{Integer >= 0. Number of pre-intervention observations
 to drop near the intervention (transition period). Default \code{0}.}
+
+\item{quiet}{Logical. If \code{FALSE} (default), the print method
+appends a one-line reminder that this is a single-group
+segmented regression and points to specialist tooling for
+autocorrelation correction. Set to \code{TRUE} to suppress.}
 }
 \value{
 An \code{mb_its} object: a list with \code{coefficients} (named

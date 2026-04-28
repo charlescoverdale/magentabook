@@ -4,7 +4,7 @@
 \alias{mb_did_2x2}
 \title{Canonical 2x2 difference-in-differences estimator}
 \usage{
-mb_did_2x2(y, treated, post, cluster = NULL, alpha = 0.05)
+mb_did_2x2(y, treated, post, cluster = NULL, alpha = 0.05, quiet = FALSE)
 }
 \arguments{
 \item{y}{Numeric vector of outcomes.}
@@ -21,11 +21,16 @@ correction). If \code{NULL}, conventional OLS SEs are returned.}
 
 \item{alpha}{Numeric in \verb{(0, 1)}. Significance level for the
 confidence interval. Default \code{0.05}.}
+
+\item{quiet}{Logical. If \code{FALSE} (default), the print method
+appends a one-line reminder that this is a canonical 2x2 DiD
+and points to specialist tooling for staggered adoption or
+heterogeneous treatment effects. Set to \code{TRUE} to suppress.}
 }
 \value{
 An \code{mb_did} object: a list with \code{estimate}, \code{se},
 \code{t_stat}, \code{p_value}, \code{ci_low}, \code{ci_high}, group means,
-\code{cluster_robust}, \code{n}, and \code{vintage}.
+\code{cluster_robust}, \code{n}, \code{quiet}, and \code{vintage}.
 }
 \description{
 Returns the simple two-period, two-group DiD estimate of an

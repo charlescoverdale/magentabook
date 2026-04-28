@@ -4,7 +4,13 @@
 \alias{mb_stepped_wedge}
 \title{Stepped-wedge design effect}
 \usage{
-mb_stepped_wedge(steps, clusters_per_step, individuals_per_cluster, icc)
+mb_stepped_wedge(
+  steps,
+  clusters_per_step,
+  individuals_per_cluster,
+  icc,
+  formula = c("hemming", "hussey_hughes")
+)
 }
 \arguments{
 \item{steps}{Integer. Number of measurement periods (also called
@@ -18,12 +24,18 @@ cluster per period.}
 
 \item{icc}{Numeric in \verb{[0, 1]}. Intra-class correlation
 coefficient.}
+
+\item{formula}{Character scalar. One of \code{"hemming"} (default,
+the closed form of Woertman et al. 2013 and Hemming et al.
+2015) or \code{"hussey_hughes"} (the Hussey-Hughes 2007 closed
+form). See Details.}
 }
 \value{
 A list with elements \code{deff_cluster} (the within-period
 cluster design effect), \code{correction_factor} (the stepped-wedge
 correction relative to a parallel cluster RCT), \code{deff_sw} (the
-product), and \code{n_total} (total observations across the trial).
+product), \code{n_total} (total observations across the trial), and
+\code{formula} (which closed form was used).
 }
 \description{
 Computes the design effect for a stepped-wedge cluster
@@ -31,18 +43,32 @@ randomised trial relative to an individually-randomised parallel
 design with the same total observations.
 }
 \details{
-Implements the closed-form stepped-wedge design effect of
-Woertman et al. (2013) and Hemming et al. (2015):
+Both implemented forms assume a balanced design: equal cluster
+size, equal-period intervals, complete data, no time effects
+beyond a common period mean, and one outcome measurement per
+cluster-period. For non-standard designs use the
+\pkg{swCRTdesign} package or the Hooper-Bourke calculator.
 
-Within-period cluster design effect:
+\strong{Hemming/Woertman form} (\code{formula = "hemming"}, default):
 \deqn{\text{DEFF}_c = 1 + (mT - 1)\rho}
+\deqn{\text{CF}_{\text{Hem}} = \frac{3(1-\rho)}{2T(1 - 1/T^2)}}
+\deqn{\text{DEFF}_{sw} = \text{DEFF}_c \cdot \text{CF}_{\text{Hem}}}
 
-Stepped-wedge correction relative to a parallel cluster RCT:
-\deqn{\text{CF} = \frac{3(1-\rho)}{2T(1 - 1/T^2)}}
+\strong{Hussey-Hughes form} (\code{formula = "hussey_hughes"}): replaces
+the Hemming correction factor with the Hussey-Hughes (2007)
+closed form for a balanced stepped wedge with one cluster
+crossing over per step, derived from their equation (7):
+\deqn{\text{CF}_{\text{HH}} = \frac{T(1-\rho)}{(T-1)(T+1)/3 \cdot (1 + (mT-1)\rho/T)}}
+This form makes the within-cluster correlation structure
+explicit and is preferred by Hemming et al. (2015) when \code{rho} is
+large or the number of steps is small. The two forms agree to
+within ~5 percent for moderate \code{rho} (\verb{<= 0.1}) and more than
+four steps; they diverge for high \code{rho} or short trials.
 
-Combined: \code{DEFF_sw = DEFF_c * CF}. This is the multiplier on
-the variance of the treatment effect compared with an
-individually-randomised design with the same total observations.
+For research-grade stepped-wedge designs (variable cluster
+size, missing data, time-by-treatment interactions, decay of
+within-cluster correlation), use \code{swCRTdesign::swPwr} or
+\code{clusterPower::cps.sw.binary}.
 }
 \examples{
 mb_stepped_wedge(

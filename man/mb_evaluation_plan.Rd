@@ -57,6 +57,7 @@ mb_evaluation_plan(
 \code{\link[=mb_stakeholders]{mb_stakeholders()}}, \code{\link[=mb_evaluation_report]{mb_evaluation_report()}}.
 
 Other planning: 
+\code{\link{mb_balance_table}()},
 \code{\link{mb_counterfactual}()},
 \code{\link{mb_questions}()},
 \code{\link{mb_stakeholders}()}

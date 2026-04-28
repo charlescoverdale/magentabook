@@ -52,6 +52,16 @@ For two means, power is
 where \eqn{s} is \code{sides} and \eqn{d} is the standardised effect.
 For two proportions, the effect uses the arcsine variance-stabilising
 transform: \eqn{h = 2\arcsin\sqrt{p_1} - 2\arcsin\sqrt{p_2}}.
+
+Approximation note: this implementation uses the large-sample
+normal approximation. The standard alternative (used by
+\pkg{pwr}::\code{\link[pwr]{pwr.t.test}}) uses the noncentral
+t-distribution. For typical evaluation sample sizes
+(\code{n_per_group >= 50}) the two agree to within 1-2 percentage
+points of power; for \code{n_per_group < 30} the discrepancy is
+larger and \pkg{pwr} should be preferred. magentabook ships
+equivalence tests against \pkg{pwr} (see
+\code{tests/testthat/test-pwr-equivalence.R}).
 }
 \examples{
 mb_power(n_per_group = 200, effect_size = 0.3)
@@ -60,6 +70,9 @@ mb_power(n_per_group = 500, type = "proportion", p1 = 0.40, p2 = 0.50)
 \references{
 Cohen, J. (1988). Statistical Power Analysis for the
 Behavioral Sciences (2nd ed.). Lawrence Erlbaum.
+
+Champely, S. (2020). pwr: Basic Functions for Power Analysis.
+R package version 1.3-0.
 
 HM Treasury (2020). The Magenta Book, chapter on impact
 evaluation, section on power analysis.

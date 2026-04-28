@@ -21,6 +21,15 @@
 #'   include. Default `3`.
 #' @param lags Integer >= 0. Number of post-treatment periods.
 #'   Default `3`.
+#' @param cluster Optional vector identifying clusters for
+#'   cluster-robust standard errors (CR1 with finite-sample
+#'   correction `(G/(G-1)) * (N-1)/(N-K)`). Common choice: pass
+#'   `unit` to cluster at the unit level. If `NULL` (default),
+#'   conventional OLS SEs are returned.
+#' @param quiet Logical. If `FALSE` (default), the print method
+#'   appends a one-line reminder that this is a fixed-treatment-
+#'   time event study and points to \pkg{fixest} (`sunab()`) or
+#'   \pkg{did} for staggered adoption. Set to `TRUE` to suppress.
 #'
 #' @return An `mb_event_study` object: a list with `event_time`,
 #'   `estimate`, `se`, plus `n`, `n_units`, `n_periods`,
@@ -66,7 +75,8 @@
 #'   leads = 3, lags = 3
 #' )
 mb_event_study <- function(y, unit, time, treatment_time,
-                           treated, leads = 3L, lags = 3L) {
+                           treated, leads = 3L, lags = 3L,
+                           cluster = NULL, quiet = FALSE) {
   validate_numeric(y,    arg = "y")
   validate_numeric(time, arg = "time")
   if (length(unit) != length(y) || length(time) != length(y)) {
@@ -110,8 +120,30 @@ mb_event_study <- function(y, unit, time, treatment_time,
   beta <- drop(XtX_inv %*% crossprod(X, y))
   resid <- y - drop(X %*% beta)
   n <- length(y); k <- ncol(X)
-  sigma2 <- sum(resid^2) / max(n - k, 1L)
-  vcov_b <- sigma2 * XtX_inv
+
+  cluster_robust <- FALSE
+  if (is.null(cluster)) {
+    sigma2 <- sum(resid^2) / max(n - k, 1L)
+    vcov_b <- sigma2 * XtX_inv
+  } else {
+    if (length(cluster) != n) {
+      cli::cli_abort("{.arg cluster} must have length {.val {n}}.")
+    }
+    g <- as.factor(cluster)
+    G <- nlevels(g)
+    if (G < 2L) cli::cli_abort("Need at least 2 clusters for cluster-robust SEs.")
+    meat <- matrix(0, nrow = k, ncol = k)
+    for (lvl in levels(g)) {
+      idx <- which(g == lvl)
+      X_g <- X[idx, , drop = FALSE]
+      u_g <- resid[idx]
+      Xu  <- crossprod(X_g, u_g)
+      meat <- meat + tcrossprod(Xu)
+    }
+    correction <- (G / (G - 1)) * ((n - 1) / (n - k))
+    vcov_b <- correction * XtX_inv %*% meat %*% XtX_inv
+    cluster_robust <- TRUE
+  }
 
   event_idx <- (k - length(ks) + 1L):k
   estimate <- unname(beta[event_idx])
@@ -125,6 +157,8 @@ mb_event_study <- function(y, unit, time, treatment_time,
     n_units        = nlevels(unit_f),
     n_periods      = nlevels(time_f),
     treatment_time = treatment_time,
+    cluster_robust = cluster_robust,
+    quiet          = isTRUE(quiet),
     vintage        = .mb_vintage()
   )
   class(out) <- c("mb_event_study", "list")

@@ -4,7 +4,17 @@
 \alias{mb_event_study}
 \title{Simple event-study coefficients}
 \usage{
-mb_event_study(y, unit, time, treatment_time, treated, leads = 3L, lags = 3L)
+mb_event_study(
+  y,
+  unit,
+  time,
+  treatment_time,
+  treated,
+  leads = 3L,
+  lags = 3L,
+  cluster = NULL,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{y}{Numeric vector of outcomes.}
@@ -27,6 +37,17 @@ include. Default \code{3}.}
 
 \item{lags}{Integer >= 0. Number of post-treatment periods.
 Default \code{3}.}
+
+\item{cluster}{Optional vector identifying clusters for
+cluster-robust standard errors (CR1 with finite-sample
+correction \code{(G/(G-1)) * (N-1)/(N-K)}). Common choice: pass
+\code{unit} to cluster at the unit level. If \code{NULL} (default),
+conventional OLS SEs are returned.}
+
+\item{quiet}{Logical. If \code{FALSE} (default), the print method
+appends a one-line reminder that this is a fixed-treatment-
+time event study and points to \pkg{fixest} (\code{sunab()}) or
+\pkg{did} for staggered adoption. Set to \code{TRUE} to suppress.}
 }
 \value{
 An \code{mb_event_study} object: a list with \code{event_time},

@@ -116,10 +116,9 @@ test_that("mb_cluster_design validates inputs", {
 test_that("mb_stepped_wedge returns a list with deff and total N", {
   res <- mb_stepped_wedge(steps = 5, clusters_per_step = 4,
                           individuals_per_cluster = 20, icc = 0.05)
-  expect_named(res, c("deff_cluster", "correction_factor", "deff_sw", "n_total"))
-  # n_total = 5 * 4 * 20 = 400
+  expect_named(res, c("deff_cluster", "correction_factor", "deff_sw",
+                      "formula", "n_total"))
   expect_equal(res$n_total, 400)
-  # CF = 3*(1-0.05)/(2*5*(1-1/25)) = 2.85 / (10 * 0.96) = 0.296875
   expect_equal(round(res$correction_factor, 6),
                round(3 * 0.95 / (10 * (1 - 1/25)), 6))
 })

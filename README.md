@@ -120,7 +120,7 @@ mb_data_versions()
 | Family | Functions |
 |---|---|
 | Theory of change | `mb_theory_of_change()`, `mb_logframe()`, `mb_assumptions()` |
-| Planning | `mb_evaluation_plan()`, `mb_questions()`, `mb_counterfactual()`, `mb_stakeholders()` |
+| Planning | `mb_evaluation_plan()`, `mb_questions()`, `mb_counterfactual()`, `mb_stakeholders()`, `mb_balance_table()` |
 | Power and design | `mb_power()`, `mb_mde()`, `mb_sample_size()`, `mb_cluster_design()`, `mb_stepped_wedge()`, `mb_icc_reference()` |
 | Maryland SMS | `mb_sms_rate()`, `mb_sms_explain()` |
 | Confidence | `mb_confidence()`, `mb_confidence_summary()` |
