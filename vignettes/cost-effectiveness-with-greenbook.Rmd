@@ -1,0 +1,187 @@
+---
+title: "Cost-effectiveness with magentabook and greenbook"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cost-effectiveness with magentabook and greenbook}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(magentabook)
+greenbook_available <- requireNamespace("greenbook", quietly = TRUE)
+```
+
+The Green Book covers *appraisal* (decide whether to fund a policy). The Magenta
+Book covers *evaluation* (learn whether the funded policy worked). The two
+packages compose cleanly: `greenbook` discounts and rebases cashflows;
+`magentabook` turns the resulting present values into cost-effectiveness
+ratios and net benefits.
+
+This vignette compares two delivery options for a hypothetical GBP 1.5m health
+intervention: an enhanced model that costs more upfront but is expected to
+deliver more QALYs.
+
+## Step 1: build the cashflows
+
+```{r}
+# 5-year horizon, real GBP, 2026 prices
+years <- 0:4
+
+# Status quo: GBP 1m capex in year 0, then GBP 100k opex per year
+cost_a <- c(1e6, 1e5, 1e5, 1e5, 1e5)
+
+# Enhanced: GBP 1.5m capex, GBP 150k opex
+cost_b <- c(1.5e6, 1.5e5, 1.5e5, 1.5e5, 1.5e5)
+
+# QALY profile: enhanced delivers more in steady-state
+qaly_a <- c(0, 80, 80, 80, 80)
+qaly_b <- c(0, 100, 110, 115, 115)
+```
+
+## Step 2: discount with greenbook
+
+If `greenbook` is available, use the kinked STPR (3.5 percent over the first
+30 years for a non-health appraisal; or 1.5 percent under the health schedule):
+
+```{r, eval = greenbook_available}
+gb_npv_cost_a <- greenbook::gb_npv(-cost_a, schedule = "health")
+gb_npv_cost_b <- greenbook::gb_npv(-cost_b, schedule = "health")
+
+gb_npv_qaly_a <- greenbook::gb_npv(qaly_a, schedule = "health")
+gb_npv_qaly_b <- greenbook::gb_npv(qaly_b, schedule = "health")
+
+# Convert to absolute (positive) PV costs
+pv_cost_a <- abs(gb_npv_cost_a)
+pv_cost_b <- abs(gb_npv_cost_b)
+
+c(pv_cost_a = pv_cost_a, pv_cost_b = pv_cost_b)
+c(pv_qaly_a = gb_npv_qaly_a, pv_qaly_b = gb_npv_qaly_b)
+```
+
+```{r, include = FALSE}
+# Fallback values for when greenbook is not installed (vignette must still build)
+if (!greenbook_available) {
+  # Approximate health-schedule discounting at r = 0.015
+  df <- 1 / (1 + 0.015)^(0:4)
+  pv_cost_a   <- sum(cost_a * df)
+  pv_cost_b   <- sum(cost_b * df)
+  gb_npv_qaly_a <- sum(qaly_a * df)
+  gb_npv_qaly_b <- sum(qaly_b * df)
+}
+```
+
+## Step 3: cost-effectiveness with magentabook
+
+Plain cost per QALY for each option:
+
+```{r}
+cea_a <- mb_cea(cost = pv_cost_a, effect = gb_npv_qaly_a, label = "Status quo")
+cea_b <- mb_cea(cost = pv_cost_b, effect = gb_npv_qaly_b, label = "Enhanced")
+cea_a
+cea_b
+```
+
+Incremental analysis (B vs A):
+
+```{r}
+icer <- mb_icer(
+  cost_a   = pv_cost_a, effect_a = gb_npv_qaly_a,
+  cost_b   = pv_cost_b, effect_b = gb_npv_qaly_b,
+  label_a  = "Status quo", label_b  = "Enhanced"
+)
+icer
+```
+
+The dominance flag tells us which quadrant of the cost-effectiveness plane the
+enhanced option sits in.
+
+## Step 4: net benefit at standard willingness-to-pay thresholds
+
+NICE's reference WTP for a QALY is GBP 20k-30k. The cross-government Magenta
+Book equivalent is GBP 70k per QALY. Compute incremental net benefit at each:
+
+```{r}
+sapply(
+  c(NICE_low = 20000, NICE_high = 30000, MB_central = 70000),
+  function(wtp) mb_inb(icer$delta_cost, icer$delta_effect, wtp)
+)
+```
+
+Positive INB means the option is cost-effective at that WTP.
+
+## Step 5: probabilistic sensitivity
+
+Real evaluations carry uncertainty in both costs and effects. Suppose a
+probabilistic sensitivity analysis (e.g. Monte-Carlo over an underlying
+trial's posterior) gives sampled draws of the incremental cost and
+incremental effect:
+
+```{r}
+set.seed(20260427)
+n_draws <- 5000
+delta_cost   <- rnorm(n_draws, mean = icer$delta_cost,   sd = 1e5)
+delta_effect <- rnorm(n_draws, mean = icer$delta_effect, sd = 30)
+
+ceac <- mb_ceac(
+  delta_cost, delta_effect,
+  wtp_grid = seq(0, 100000, by = 5000)
+)
+ceac
+```
+
+Each row is the probability that the enhanced option is cost-effective at the
+corresponding WTP. The CEAC is the standard cost-effectiveness uncertainty
+visualisation; pipe `ceac$wtp` and `ceac$prob_cost_effective` to your
+plotting library of choice.
+
+## Step 6: report
+
+```{r}
+sms_b <- mb_sms_rate(
+  level = 5, study = "Pilot RCT of the enhanced option",
+  design = "Cluster RCT, 30 GP practices",
+  notes = "Power calculation per mb_sample_size()"
+)
+
+conf <- mb_confidence(
+  rating                 = "high",
+  question               = "Does the enhanced option deliver more QALYs",
+  evidence_strength      = "Single Level 5 cluster RCT plus modelled extrapolation",
+  methodological_quality = "Strong: randomisation worked, follow-up rate > 90%",
+  generalisability       = "Tested in a representative sample of UK GP practices",
+  rationale              = "RCT plus consistent observational evidence"
+)
+
+report <- mb_evaluation_report(
+  toc = mb_theory_of_change(
+    inputs = "GBP 1.5m capex + GBP 150k opex p.a.",
+    activities = "Enhanced clinical pathway",
+    outputs = "More patients treated to standard",
+    outcomes = "Higher QALYs gained per patient",
+    impact = "Improved population health"
+  ),
+  sms = sms_b,
+  confidence = conf,
+  cea = list(cea_a, cea_b, icer),
+  name = "Enhanced clinical pathway evaluation"
+)
+report
+```
+
+Export the bundle to LaTeX for inclusion in a one-page committee paper:
+
+```{r}
+cat(mb_to_latex(report, caption = "Enhanced pathway evaluation summary"))
+```
+
+## Why this composition matters
+
+By the time a Magenta Book evaluation is asked to compute a cost-effectiveness
+ratio, the cashflows are usually nominal and unaligned with the appraisal-stage
+price base. Without `greenbook`, the analyst hand-discounts in a spreadsheet
+and the audit trail is fragile. With both packages loaded, the appraisal-stage
+discount factors and the evaluation-stage cost-effectiveness primitives draw
+from the same vintage-tagged parameter tables, and the entire chain is testable
+R code.

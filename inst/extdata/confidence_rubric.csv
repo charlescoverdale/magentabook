@@ -1,0 +1,4 @@
+rating,label,evidence_strength,methodological_quality,generalisability,description
+high,High confidence,"Multiple independent SMS Level 4 or 5 studies","Strong; identifying assumptions credible","Findings replicated across settings or contexts","Decision-grade evidence; suitable for scaling and policy commitment"
+medium,Medium confidence,"At least one SMS Level 3 or 4 study","Adequate; some methodological caveats","Findings established in one or a few settings","Indicative evidence; supports continued investment with monitoring"
+low,Low confidence,"SMS Level 1 or 2 only, or conflicting Level 3+ studies","Weak; selection bias and confounding plausible","Findings not yet established beyond original setting","Exploratory evidence; further evaluation needed before scaling"

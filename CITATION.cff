@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use magentabook, please cite it as below."
+title: "magentabook: HM Treasury Magenta Book Policy Evaluation Primitives"
+authors:
+  - family-names: Coverdale
+    given-names: Charles
+    email: charlesfcoverdale@gmail.com
+type: software
+version: 0.1.0
+date-released: 2026-04-27
+license: MIT
+repository-code: "https://github.com/charlescoverdale/magentabook"
+url: "https://github.com/charlescoverdale/magentabook"
+abstract: >-
+  Implements policy-evaluation primitives from HM Treasury Magenta Book
+  guidance: theory of change and logframe construction, evaluation
+  planning and stakeholder mapping, power and minimum-detectable-effect
+  calculations including cluster and stepped-wedge designs, Maryland
+  Scientific Methods Scale ratings, structured confidence ratings,
+  light-weight difference-in-differences and interrupted-time-series
+  estimators, and cost-effectiveness analysis (cost per outcome,
+  incremental cost-effectiveness ratio, acceptability curves,
+  incremental net benefit, quality-adjusted and disability-adjusted
+  life years). Designed as the evaluation companion to the appraisal
+  package greenbook.
+keywords:
+  - r
+  - economics
+  - evaluation
+  - policy
+  - magenta book
+  - cost-effectiveness
+  - power-analysis
+  - hm-treasury

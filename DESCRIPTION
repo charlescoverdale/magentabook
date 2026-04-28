@@ -1,0 +1,40 @@
+Package: magentabook
+Title: HM Treasury Magenta Book Policy Evaluation Primitives
+Version: 0.1.0
+Authors@R:
+    person("Charles", "Coverdale", , "charlesfcoverdale@gmail.com", role = c("aut", "cre"))
+Description: Implements policy evaluation primitives from HM Treasury
+    Magenta Book guidance (HM Treasury, 2020): theory of change and
+    logframe construction, evaluation planning and stakeholder mapping,
+    power and minimum-detectable-effect calculations for randomised
+    designs (including cluster and stepped-wedge designs), Maryland
+    Scientific Methods Scale ratings, structured confidence ratings,
+    light-weight difference-in-differences and interrupted-time-series
+    estimators, and cost-effectiveness analysis (cost per outcome,
+    incremental cost-effectiveness ratio, acceptability curves,
+    incremental net benefit, quality-adjusted and disability-adjusted
+    life years). Designed as the evaluation companion to the appraisal
+    package 'greenbook'. Bundled rubric and reference tables carry
+    vintage metadata for reproducibility.
+Depends: R (>= 4.1.0)
+License: MIT + file LICENSE
+Encoding: UTF-8
+Language: en-US
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports:
+    cli (>= 3.6.0),
+    stats,
+    utils
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    greenbook,
+    openxlsx,
+    officer,
+    flextable
+Config/testthat/edition: 3
+URL: https://github.com/charlescoverdale/magentabook
+BugReports: https://github.com/charlescoverdale/magentabook/issues
+VignetteBuilder: knitr

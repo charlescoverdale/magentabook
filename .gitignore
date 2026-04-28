@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+.Ruserdata
+*.Rproj
+inst/doc
+docs/
+magentabook.Rcheck/
+magentabook_*.tar.gz

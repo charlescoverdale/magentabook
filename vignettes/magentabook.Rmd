@@ -1,0 +1,271 @@
+---
+title: "Designing a Magenta Book evaluation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Designing a Magenta Book evaluation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(magentabook)
+```
+
+This vignette walks through the four canonical Magenta Book stages for a worked
+example: a hypothetical GBP 50m skills programme aimed at increasing employment
+among long-term unemployed claimants. We move from theory of change to evaluation
+plan to power calculation to confidence rating, all in one R session.
+
+## Stage 1: theory of change
+
+The theory of change links inputs through to long-run impact. `mb_theory_of_change()`
+captures the five canonical Magenta Book levels plus assumptions and external
+factors.
+
+```{r}
+toc <- mb_theory_of_change(
+  inputs     = c("GBP 50m grant", "12 FTE programme team",
+                 "Partnership with Jobcentre Plus"),
+  activities = c("Design training curriculum",
+                 "Deliver workshops in 50 sites",
+                 "Provide ongoing mentoring"),
+  outputs    = c("500 workshops delivered",
+                 "8000 attendees",
+                 "5000 completed mentoring blocks"),
+  outcomes   = c("Improved employability skills",
+                 "Increased job-search confidence",
+                 "Higher application rates"),
+  impact     = "Higher 12-month employment among long-term unemployed",
+  assumptions = c(
+    "Workshops cause skills uplift (not just selection of motivated attendees)",
+    "Skills uplift translates into application behaviour",
+    "Local labour markets absorb the additional applicants"
+  ),
+  external_factors = c(
+    "Macro labour market remains broadly stable",
+    "No competing employability programme launches in same areas"
+  ),
+  name = "Skills uplift programme"
+)
+toc
+```
+
+Pivoting to a logframe with indicators, means of verification, and risks:
+
+```{r}
+mb_logframe(
+  toc,
+  indicators = list(
+    outputs  = c("Workshops delivered", "Attendees per workshop"),
+    outcomes = c("Skills score (post)", "Application count"),
+    impact   = "Employment rate at 12 months"
+  ),
+  mov = list(
+    outputs  = "Programme delivery log",
+    outcomes = c("Pre/post survey", "DWP admin data"),
+    impact   = "Linked HMRC PAYE records"
+  ),
+  risks = list(
+    outputs  = "Attendance below planned levels",
+    outcomes = "Self-report bias in skills score",
+    impact   = "Macro shock confounds the estimate"
+  )
+)
+```
+
+The high-criticality assumptions belong in a separate register:
+
+```{r}
+mb_assumptions(
+  level = c("activities", "outcomes", "impact"),
+  description = c(
+    "Workshops are well-attended",
+    "Skills uplift translates into job entry",
+    "Employment rise persists at 12 months"
+  ),
+  evidence = c(
+    "Pilot attendance was 80%",
+    "Indirect: similar programmes show 0.3 SD effect",
+    "Limited evidence on longer-run persistence"
+  ),
+  criticality = c("medium", "high", "high")
+)
+```
+
+## Stage 2: evaluation plan
+
+Tag the evaluation questions by Magenta Book type:
+
+```{r}
+qs <- mb_questions(
+  text = c(
+    "Did the programme cause higher 12-month employment",
+    "How large is the effect, and for whom",
+    "Was delivery faithful to the design",
+    "What was the cost per additional job"
+  ),
+  type     = c("impact", "impact", "process", "economic"),
+  priority = c("primary", "secondary", "secondary", "primary")
+)
+qs
+```
+
+Pin down the counterfactual:
+
+```{r}
+cf <- mb_counterfactual(
+  definition  = "Eligible non-applicants matched on age, prior unemployment duration, and region",
+  source      = "quasi-experimental",
+  credibility = "Moderate; selection on observables only, but rich admin covariates available"
+)
+cf
+```
+
+Map stakeholders for governance:
+
+```{r}
+mb_stakeholders(
+  name = c("HM Treasury", "DWP", "Local authorities", "What Works Centre"),
+  role = c("Funder", "Policy lead", "Delivery", "Synthesis"),
+  raci = c("A", "R", "C", "I"),
+  interest  = c(5, 5, 4, 3),
+  influence = c(5, 5, 3, 2)
+)
+```
+
+Bundle into a plan:
+
+```{r}
+plan <- mb_evaluation_plan(
+  scope = "GBP 50m programme, 50 sites, 2026-2029",
+  questions = qs,
+  methods = c(
+    impact   = "Difference-in-differences with matched comparison group",
+    process  = "Mixed-methods implementation review",
+    economic = "Cost per job, with QALY-adjusted variant"
+  ),
+  timing = c(baseline = "2026-Q1", midline = "2027-Q4", endline = "2029-Q2"),
+  governance = "Joint HMT / DWP steering group; peer review by What Works Centre",
+  budget = 1.5e6
+)
+plan
+```
+
+## Stage 3: power and sample size
+
+The Magenta Book stresses that an evaluation is only worth running if it can
+detect effects of policy-relevant size. We size the study assuming a target
+detectable effect of 5 percentage points on the employment rate, baseline
+employment of 30 percent, and 80 percent power.
+
+Naive (individual-level) sample size:
+
+```{r}
+mb_sample_size(
+  type = "proportion", p1 = 0.30, p2 = 0.35,
+  power = 0.8, alpha = 0.05
+)
+```
+
+But the programme is delivered in clusters (sites), so we need to inflate by
+the design effect. Jobcentre-level outcomes have an ICC around 0.04 (per the
+bundled DWP reference values):
+
+```{r}
+mb_icc_reference("employment")
+mb_cluster_design(individuals_per_cluster = 50, icc = 0.04, n_clusters = 25)
+```
+
+The design effect is a meaningful uplift; we would need roughly that multiple
+of the naive N per arm. Alternatively, a stepped-wedge design could trade a
+larger total N for staggered rollout that fits programme delivery:
+
+```{r}
+mb_stepped_wedge(
+  steps = 5, clusters_per_step = 5,
+  individuals_per_cluster = 50, icc = 0.04
+)
+```
+
+What is the smallest effect we can detect with the planned design?
+
+```{r}
+mb_mde(
+  n_per_group = 600, type = "proportion",
+  baseline = 0.30, power = 0.8
+)
+```
+
+## Stage 4: rate the evidence
+
+Once the evaluation has run, score it on the Maryland SMS:
+
+```{r}
+sms <- mb_sms_rate(
+  level  = 4,
+  study  = "Smith et al. (2029) Skills uplift evaluation",
+  design = "Difference-in-differences with matched comparison",
+  notes  = "Parallel trends supported by 4 pre-period observations; cluster-robust SEs"
+)
+sms
+```
+
+Record a structured confidence rating:
+
+```{r}
+conf_main <- mb_confidence(
+  rating                 = "medium",
+  question               = "Did the programme raise 12-month employment",
+  evidence_strength      = "One Level 4 DiD (n = 12000); supportive Level 3 cohort study",
+  methodological_quality = "Adequate; parallel trends plausible; some attrition concerns",
+  generalisability       = "Established across 50 sites in two regions",
+  rationale              = "Effect direction consistent across two studies but limited replication outside the programme footprint"
+)
+conf_main
+
+conf_process <- mb_confidence(
+  rating                 = "high",
+  question               = "Was the programme implemented faithfully",
+  evidence_strength      = "Mixed-methods process evaluation; 50-site fidelity audit",
+  methodological_quality = "Strong; documented fidelity protocol with inter-rater reliability",
+  generalisability       = "All sites covered",
+  rationale              = "Comprehensive coverage; consistent fidelity scores"
+)
+
+mb_confidence_summary(conf_main, conf_process)
+```
+
+## Bringing it together
+
+A single `mb_report` object aggregates everything:
+
+```{r}
+report <- mb_evaluation_report(
+  plan       = plan,
+  toc        = toc,
+  sms        = sms,
+  confidence = list(conf_main, conf_process),
+  name       = "Skills uplift evaluation"
+)
+report
+```
+
+Export to LaTeX for a one-pager:
+
+```{r}
+cat(mb_to_latex(report, caption = "Skills uplift evaluation summary"))
+```
+
+Word and Excel exports are available via `mb_to_word()` and `mb_to_excel()`
+(both require optional packages: `officer` + `flextable`, and `openxlsx`
+respectively).
+
+## Reproducibility
+
+Every result object stamps the package vintage. Bundled rubric and reference
+tables expose their source via `mb_data_versions()`:
+
+```{r}
+mb_data_versions()
+```

@@ -1,0 +1,15 @@
+citHeader("To cite magentabook in publications use:")
+
+bibentry(
+  bibtype = "Manual",
+  title   = "magentabook: HM Treasury Magenta Book Policy Evaluation Primitives",
+  author  = person("Charles", "Coverdale"),
+  year    = "2026",
+  note    = sprintf("R package version %s", meta$Version),
+  url     = "https://github.com/charlescoverdale/magentabook",
+  textVersion = paste0(
+    "Coverdale, C. (2026). magentabook: HM Treasury Magenta Book ",
+    "Policy Evaluation Primitives. R package version ", meta$Version,
+    ". https://github.com/charlescoverdale/magentabook"
+  )
+)
