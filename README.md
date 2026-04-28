@@ -186,6 +186,38 @@ Drummond, M. F., Sculpher, M. J., Claxton, K., Stoddart, G. L., Torrance, G. W. 
 Hemming, K., Haines, T. P., Chilton, P. J., Girling, A. J., Lilford, R. J. (2015). The stepped wedge cluster randomised trial: rationale, design, analysis, and reporting. *BMJ* 350.
 
 
+## Source documents
+
+- [HM Treasury Magenta Book (2020)](https://www.gov.uk/government/publications/the-magenta-book)
+- [Magenta Book supplementary guides (HMT, 2020)](https://www.gov.uk/government/publications/the-magenta-book) — feasibility, experimental, quasi-experimental, theory-based, value for money, qualitative, mixed methods
+- [Sherman et al. (1997). Preventing Crime: What Works, What Doesn't, What's Promising](https://www.ojp.gov/ncjrs/virtual-library/abstracts/preventing-crime-what-works-what-doesnt-whats-promising) — original Maryland SMS
+- [Cabinet Office Evaluation Task Force](https://www.gov.uk/government/organisations/evaluation-task-force) — central HMG evaluation guidance
+- [Hedges & Hedberg (2007). Intraclass Correlation Values for Planning Group-Randomized Trials in Education. EEPA 29(1)](https://doi.org/10.3102/0162373707299706)
+- [Hemming et al. (2015). The stepped wedge cluster randomised trial. BMJ 350](https://doi.org/10.1136/bmj.h391)
+- [Drummond, Sculpher, Claxton, Stoddart, Torrance (2015). Methods for the Economic Evaluation of Health Care Programmes (4e). OUP](https://global.oup.com/academic/product/methods-for-the-economic-evaluation-of-health-care-programmes-9780199665884)
+
+
+## Citation
+
+If you use `magentabook` in published work, please cite via:
+
+```r
+citation("magentabook")
+```
+
+The package citation and the underlying HM Treasury Magenta Book are both returned.
+
+
+## Issues
+
+Report bugs or request features at [GitHub Issues](https://github.com/charlescoverdale/magentabook/issues).
+
+
+## Keywords
+
+policy-evaluation, magenta-book, hm-treasury, theory-of-change, logframe, evaluation-design, power-analysis, sample-size, minimum-detectable-effect, cluster-rct, stepped-wedge, intra-class-correlation, maryland-sms, scientific-methods-scale, what-works, confidence-rating, cost-effectiveness, icer, ceac, qaly, daly, difference-in-differences, interrupted-time-series, event-study, realist-evaluation, contribution-analysis, cabinet-office-evaluation-task-force
+
+
 ## Licence
 
 MIT (c) 2026 Charles Coverdale.
