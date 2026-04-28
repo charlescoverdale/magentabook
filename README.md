@@ -173,9 +173,23 @@ packages are installed):
   are implemented identically.
 - **DiD point estimate** vs `lm(y ~ treated * post)$coefficients`:
   agreement to floating-point precision.
+- **Stepped-wedge design effect** vs `swCRTdesign::swPwr`: the
+  closed-form Hemming approximation tracks the exact Hussey-Hughes
+  variance to within roughly 0.5x to 2x for typical UK evaluation
+  designs (T = 4-6, m = 20-50, rho = 0.02-0.10). For decision-grade
+  sample-size work, prefer `swCRTdesign::swPwr`; magentabook's
+  stepped-wedge function is intended for quick comparative
+  exploration.
+- **ICER and CEAC** vs `BCEA`: `mb_icer` agrees with `BCEA::bcea`
+  point ICER to floating-point precision; `mb_ceac` produces
+  identical CEAC probabilities for the same draws.
+- **Standardised mean difference** in `mb_balance_table` vs
+  `cobalt::bal.tab` with `s.d.denom = "pooled"`: agreement to
+  `1e-8` on balanced samples (where the equal-weighted and
+  df-weighted pooled-SD forms coincide).
 
-See `tests/testthat/test-pwr-equivalence.R` and
-`tests/testthat/test-sandwich-equivalence.R` for the test grid.
+See the `tests/testthat/test-*-equivalence.R` files for the full test
+grids.
 
 
 ## What this package is not

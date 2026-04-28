@@ -158,7 +158,7 @@ mb_icer <- function(cost_a, effect_a, cost_b, effect_b,
 #' @references
 #' Fenwick, E., Claxton, K., Sculpher, M. (2001). Representing
 #' uncertainty: the role of cost-effectiveness acceptability
-#' curves. Health Economics 10(8).
+#' curves. Health Economics 10(8). <doi:10.1002/hec.635>.
 #'
 #' @family cost-effectiveness
 #' @seealso [mb_inb()], [mb_icer()].
@@ -325,6 +325,7 @@ mb_qaly <- function(utility, persons = 1, years = 1, discount_rate = NULL) {
 #' GBD 2019 Diseases and Injuries Collaborators (2020). Global
 #' burden of 369 diseases and injuries in 204 countries and
 #' territories, 1990-2019. The Lancet 396.
+#' <doi:10.1016/S0140-6736(20)30925-9>.
 #'
 #' @family cost-effectiveness
 #' @seealso [mb_qaly()].

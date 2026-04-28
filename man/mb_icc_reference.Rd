@@ -52,11 +52,17 @@ mb_icc_reference("education")
 \references{
 Hedges, L. V., Hedberg, E. C. (2007). Educational Evaluation
 and Policy Analysis 29(1).
+\url{doi:10.3102/0162373707299706}.
 
 Adams, G., Gulliford, M. C., Ukoumunne, O. C., Eldridge, S.,
 Chinn, S., Campbell, M. J. (2004). Patterns of intra-cluster
 correlation from primary care research. Statistics in
-Medicine 23.
+Medicine 23. \url{doi:10.1002/sim.1764}.
+
+Campbell, M. K., Mollison, J., Grimshaw, J. M. (2000). Cluster
+trials in implementation research: estimation of intracluster
+correlation coefficients and sample size. BMJ 321.
+\url{doi:10.1136/bmj.321.7263.778}.
 }
 \seealso{
 \code{\link[=mb_cluster_design]{mb_cluster_design()}}, \code{\link[=mb_stepped_wedge]{mb_stepped_wedge()}}.

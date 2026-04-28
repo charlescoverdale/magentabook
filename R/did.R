@@ -42,9 +42,11 @@
 #' Card, D., Krueger, A. B. (1994). Minimum Wages and Employment:
 #' A Case Study of the Fast-Food Industry in New Jersey and
 #' Pennsylvania. American Economic Review 84(4).
+#' <doi:10.1257/aer.84.4.772>.
 #'
 #' Cameron, A. C., Miller, D. L. (2015). A Practitioner's Guide to
 #' Cluster-Robust Inference. Journal of Human Resources 50(2).
+#' <doi:10.3368/jhr.50.2.317>.
 #'
 #' @family estimators
 #' @seealso [mb_its()], [mb_event_study()].

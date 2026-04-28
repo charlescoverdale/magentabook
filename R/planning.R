@@ -14,6 +14,12 @@
 #' @return An `mb_questions` data frame with columns `text`,
 #'   `type`, `priority`.
 #'
+#' @references
+#' HM Treasury (2020). The Magenta Book: Central Government
+#' Guidance on Evaluation, chapters on process, impact, and
+#' economic evaluation.
+#' <https://www.gov.uk/government/publications/the-magenta-book>.
+#'
 #' @family planning
 #' @seealso [mb_evaluation_plan()], [mb_schedule_table()].
 #'
@@ -75,6 +81,12 @@ mb_questions <- function(text,
 #'   how credible the counterfactual is.
 #'
 #' @return An `mb_counterfactual` object.
+#'
+#' @references
+#' HM Treasury (2020). The Magenta Book: Central Government
+#' Guidance on Evaluation, supplementary guidance on
+#' quasi-experimental and theory-based methods.
+#' <https://www.gov.uk/government/publications/the-magenta-book>.
 #'
 #' @family planning
 #' @seealso [mb_evaluation_plan()].
@@ -197,6 +209,12 @@ mb_stakeholders <- function(name,
 #'   cost.
 #'
 #' @return An `mb_plan` object.
+#'
+#' @references
+#' HM Treasury (2020). The Magenta Book: Central Government
+#' Guidance on Evaluation, chapter on planning and managing an
+#' evaluation.
+#' <https://www.gov.uk/government/publications/the-magenta-book>.
 #'
 #' @family planning
 #' @seealso [mb_questions()], [mb_counterfactual()],

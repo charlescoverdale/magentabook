@@ -1,6 +1,38 @@
 # magentabook 0.1.0
 
 * First release. UK HM Treasury Magenta Book policy-evaluation primitives.
+* Provenance is explicit: bundled rubrics carry honest source metadata
+  distinguishing direct quotations from researcher synthesis. ICC
+  reference values use a `value_source` flag (`"table_quote"` vs
+  `"central_estimate"`).
+* DOIs added to every `@references` block where available. Framework
+  functions (`mb_evaluation_plan`, `mb_questions`,
+  `mb_counterfactual`, `mb_theory_of_change`, etc.) cite the
+  Magenta Book (2020) chapters they correspond to.
+* `inst/CITATION` extended with footer pointing to the underlying
+  primary sources for the methods implemented (Sherman 1997, Cohen
+  1988, Hussey-Hughes 2007, Hemming 2015, Hedges & Hedberg 2007,
+  Drummond 2015, Cameron & Miller 2015, Stuart 2010).
+* Cross-validated against canonical reference implementations:
+    - `pwr` for two-sample power, sample size, MDE, and proportion
+      power (within ~3 percentage points; `test-pwr-equivalence.R`).
+    - `sandwich` for `mb_did_2x2` cluster-robust SEs (CR1 / HC1
+      to within `1e-6`; `test-sandwich-equivalence.R`).
+    - `swCRTdesign` for `mb_stepped_wedge` (closed-form Hemming
+      approximation tracks the exact Hussey-Hughes variance to
+      within roughly 0.5x to 2x for typical UK designs;
+      `test-swcrt-equivalence.R`). For decision-grade sample-size
+      work prefer `swCRTdesign::swPwr`.
+    - `BCEA` for `mb_icer` and `mb_ceac` (floating-point agreement;
+      `test-bcea-equivalence.R`).
+    - `cobalt` for `mb_balance_table` SMD on balanced samples
+      (within `1e-8`; `test-cobalt-equivalence.R`).
+* `mb_stepped_wedge` `formula` argument removed in favour of the
+  single Hemming/Woertman closed-form approximation, which is
+  documented as approximate (vs the exact Hussey-Hughes variance
+  computed by `swCRTdesign`). The earlier `formula = "hussey_hughes"`
+  branch was researcher-derived and not externally verifiable; it
+  has been removed before the package leaves disk.
 * `mb_balance_table()` added for pre-treatment balance checks (mean, SD,
   standardised mean difference, Welch t / chi-squared p, imbalance flag
   at user-controlled threshold).

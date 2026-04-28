@@ -40,7 +40,7 @@ mb_ceac(delta_cost, delta_effect, wtp_grid = seq(0, 100000, by = 10000))
 \references{
 Fenwick, E., Claxton, K., Sculpher, M. (2001). Representing
 uncertainty: the role of cost-effectiveness acceptability
-curves. Health Economics 10(8).
+curves. Health Economics 10(8). \url{doi:10.1002/hec.635}.
 }
 \seealso{
 \code{\link[=mb_inb]{mb_inb()}}, \code{\link[=mb_icer]{mb_icer()}}.

@@ -26,6 +26,15 @@ Pure computation: no network calls, no API keys, no external services.
 The expected notes are "New submission" and (occasionally on slow
 mirrors) "unable to verify current time".
 
+## Cross-validation
+
+The arithmetic primitives are cross-validated against canonical
+reference implementations on every R CMD check (when the optional
+packages are installed): `pwr` for power and sample size,
+`sandwich` for cluster-robust SEs, `swCRTdesign` for stepped-wedge
+designs, `BCEA` for cost-effectiveness, and `cobalt` for balance
+diagnostics. See the `tests/testthat/test-*-equivalence.R` files.
+
 ## Reverse dependencies
 
 None (first submission).

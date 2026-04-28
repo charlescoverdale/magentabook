@@ -46,6 +46,16 @@ For a numeric or 0/1 covariate \eqn{X} with treated mean
 \eqn{s_T}, and control SD \eqn{s_C}, the standardised mean
 difference is
 \deqn{\text{SMD} = \frac{\bar X_T - \bar X_C}{\sqrt{(s_T^2 + s_C^2)/2}}.}
+
+This is the equal-weighted pooled-SD form recommended by Stuart
+(2010) and Austin (2009) for propensity-score balance
+diagnostics. It differs from Cohen's d, which uses the
+degrees-of-freedom-weighted pooled SD
+\eqn{\sqrt{(s_T^2(n_T-1) + s_C^2(n_C-1))/(n_T+n_C-2)}}; the two
+agree when \eqn{n_T = n_C}. magentabook ships a cross-validation
+test against \code{cobalt::bal.tab} which uses the same averaged-SD
+form.
+
 Rules of thumb (Cohen 1988; Stuart 2010):
 \itemize{
 \item \verb{|SMD| < 0.10}: well balanced
@@ -71,9 +81,16 @@ mb_balance_table(treated = treated, age = age, female = female, income = income)
 \references{
 Stuart, E. A. (2010). Matching methods for causal inference: A
 review and a look forward. Statistical Science 25(1).
+\url{doi:10.1214/09-STS313}.
+
+Austin, P. C. (2009). Balance diagnostics for comparing the
+distribution of baseline covariates between treatment groups
+in propensity-score matched samples. Statistics in Medicine
+28(25). \url{doi:10.1002/sim.3697}.
 
 HM Treasury (2020). The Magenta Book, supplementary guidance on
 quasi-experimental methods.
+\url{https://www.gov.uk/government/publications/the-magenta-book}.
 }
 \seealso{
 \code{\link[=mb_did_2x2]{mb_did_2x2()}}, \code{\link[=mb_questions]{mb_questions()}}.

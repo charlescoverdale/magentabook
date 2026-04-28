@@ -49,6 +49,7 @@ Pawson, R., Tilley, N. (1997). Realistic Evaluation. SAGE.
 
 HM Treasury (2020). The Magenta Book, chapter on theory-based
 evaluation.
+\url{https://www.gov.uk/government/publications/the-magenta-book}.
 }
 \seealso{
 \code{\link[=mb_contribution_claim]{mb_contribution_claim()}}.

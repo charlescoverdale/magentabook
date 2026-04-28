@@ -76,6 +76,7 @@ toc
 \references{
 HM Treasury (2020). The Magenta Book: Central Government
 Guidance on Evaluation, chapter on theory-based evaluation.
+\url{https://www.gov.uk/government/publications/the-magenta-book}.
 }
 \seealso{
 \code{\link[=mb_logframe]{mb_logframe()}}, \code{\link[=mb_assumptions]{mb_assumptions()}}.

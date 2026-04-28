@@ -13,3 +13,19 @@ bibentry(
     ". https://github.com/charlescoverdale/magentabook"
   )
 )
+
+citFooter(
+  "When magentabook is used to implement specific named methods,",
+  "please also cite the underlying primary source. The most common are:",
+  "",
+  "  Sherman et al. (1997) for the Maryland Scientific Methods Scale.",
+  "  Cohen (1988) for two-sample power analysis.",
+  "  Hussey & Hughes (2007) and Hemming et al. (2015) for stepped-wedge designs.",
+  "  Hedges & Hedberg (2007) for ICC reference values in education.",
+  "  Drummond et al. (2015) for cost-effectiveness analysis.",
+  "  Cameron & Miller (2015) for cluster-robust inference.",
+  "  Stuart (2010) for pre-treatment balance diagnostics.",
+  "  HM Treasury (2020). The Magenta Book.",
+  "",
+  "See the @references block of each function for the full citation."
+)

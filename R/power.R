@@ -46,9 +46,12 @@
 #'
 #' Champely, S. (2020). pwr: Basic Functions for Power Analysis.
 #' R package version 1.3-0.
+#' <https://CRAN.R-project.org/package=pwr>.
 #'
-#' HM Treasury (2020). The Magenta Book, chapter on impact
-#' evaluation, section on power analysis.
+#' HM Treasury (2020). The Magenta Book: Central Government
+#' Guidance on Evaluation. Chapter on impact evaluation, section
+#' on power analysis.
+#' <https://www.gov.uk/government/publications/the-magenta-book>.
 #'
 #' @family power
 #' @seealso [mb_mde()], [mb_sample_size()], [mb_cluster_design()].
@@ -233,6 +236,7 @@ mb_sample_size <- function(effect_size = NULL,
 #' Hedges, L. V., Hedberg, E. C. (2007). Intraclass Correlation
 #' Values for Planning Group-Randomized Trials in Education.
 #' Educational Evaluation and Policy Analysis 29(1).
+#' <doi:10.3102/0162373707299706>.
 #'
 #' @family power
 #' @seealso [mb_icc_reference()], [mb_stepped_wedge()],
@@ -275,58 +279,60 @@ mb_cluster_design <- function(individuals_per_cluster, icc, n_clusters = NULL) {
 #'   cluster per period.
 #' @param icc Numeric in `[0, 1]`. Intra-class correlation
 #'   coefficient.
-#' @param formula Character scalar. One of `"hemming"` (default,
-#'   the closed form of Woertman et al. 2013 and Hemming et al.
-#'   2015) or `"hussey_hughes"` (the Hussey-Hughes 2007 closed
-#'   form). See Details.
 #'
 #' @return A list with elements `deff_cluster` (the within-period
 #'   cluster design effect), `correction_factor` (the stepped-wedge
 #'   correction relative to a parallel cluster RCT), `deff_sw` (the
-#'   product), `n_total` (total observations across the trial), and
-#'   `formula` (which closed form was used).
+#'   product), and `n_total` (total observations across the trial).
 #'
 #' @details
-#' Both implemented forms assume a balanced design: equal cluster
-#' size, equal-period intervals, complete data, no time effects
-#' beyond a common period mean, and one outcome measurement per
-#' cluster-period. For non-standard designs use the
-#' \pkg{swCRTdesign} package or the Hooper-Bourke calculator.
+#' Implements the closed-form approximation from Hemming et al.
+#' (2015) BMJ Box 2:
 #'
-#' **Hemming/Woertman form** (`formula = "hemming"`, default):
+#' Within-cluster design effect (cluster RCT vs individual RCT
+#' with same total observations):
 #' \deqn{\text{DEFF}_c = 1 + (mT - 1)\rho}
-#' \deqn{\text{CF}_{\text{Hem}} = \frac{3(1-\rho)}{2T(1 - 1/T^2)}}
-#' \deqn{\text{DEFF}_{sw} = \text{DEFF}_c \cdot \text{CF}_{\text{Hem}}}
 #'
-#' **Hussey-Hughes form** (`formula = "hussey_hughes"`): replaces
-#' the Hemming correction factor with the Hussey-Hughes (2007)
-#' closed form for a balanced stepped wedge with one cluster
-#' crossing over per step, derived from their equation (7):
-#' \deqn{\text{CF}_{\text{HH}} = \frac{T(1-\rho)}{(T-1)(T+1)/3 \cdot (1 + (mT-1)\rho/T)}}
-#' This form makes the within-cluster correlation structure
-#' explicit and is preferred by Hemming et al. (2015) when `rho` is
-#' large or the number of steps is small. The two forms agree to
-#' within ~5 percent for moderate `rho` (`<= 0.1`) and more than
-#' four steps; they diverge for high `rho` or short trials.
+#' Stepped-wedge correction relative to a parallel cluster RCT:
+#' \deqn{\text{CF} = \frac{3(1-\rho)}{2T(1 - 1/T^2)}}
 #'
-#' For research-grade stepped-wedge designs (variable cluster
-#' size, missing data, time-by-treatment interactions, decay of
-#' within-cluster correlation), use `swCRTdesign::swPwr` or
-#' `clusterPower::cps.sw.binary`.
+#' Combined: `DEFF_sw = DEFF_c * CF`. This is a multiplier on the
+#' variance of the treatment effect compared with an
+#' individually-randomised design with the same total observations.
+#'
+#' Approximation note: this is the closed-form approximation. The
+#' exact Hussey-Hughes (2007) variance, which `swCRTdesign::swPwr`
+#' computes from the design matrix, can differ by 20-40 percent for
+#' typical UK evaluation designs. magentabook ships a
+#' cross-validation test (`tests/testthat/test-swcrt-equivalence.R`)
+#' that documents the magnitude of this approximation gap on a
+#' grid of designs. For production sample-size work, especially
+#' where rho is high or the number of steps is small, prefer
+#' `swCRTdesign::swPwr` or `clusterPower::cps.sw.binary` over this
+#' function. Use `mb_stepped_wedge` for quick comparative
+#' exploration; use the specialist packages for the number you
+#' commit to in a published evaluation plan.
+#'
+#' Both forms assume a balanced design: equal cluster size,
+#' equal-period intervals, complete data, no time-by-treatment
+#' interaction, and one outcome measurement per cluster-period.
+#' For non-standard designs use the specialist packages above.
 #'
 #' @references
 #' Hussey, M. A., Hughes, J. P. (2007). Design and analysis of
 #' stepped wedge cluster randomized trials. Contemporary Clinical
-#' Trials 28.
+#' Trials 28(2). <doi:10.1016/j.cct.2006.05.007>.
 #'
 #' Woertman, W., de Hoop, E., Moerbeek, M., Zuidema, S. U.,
 #' Gerritsen, D. L., Teerenstra, S. (2013). Stepped wedge designs
 #' could reduce the required sample size in cluster randomized
-#' trials. Journal of Clinical Epidemiology 66.
+#' trials. Journal of Clinical Epidemiology 66(7).
+#' <doi:10.1016/j.jclinepi.2012.12.003>.
 #'
 #' Hemming, K., Haines, T. P., Chilton, P. J., Girling, A. J.,
 #' Lilford, R. J. (2015). The stepped wedge cluster randomised
 #' trial: rationale, design, analysis, and reporting. BMJ 350.
+#' <doi:10.1136/bmj.h391>.
 #'
 #' @family power
 #' @seealso [mb_cluster_design()], [mb_icc_reference()].
@@ -342,9 +348,7 @@ mb_cluster_design <- function(individuals_per_cluster, icc, n_clusters = NULL) {
 mb_stepped_wedge <- function(steps,
                              clusters_per_step,
                              individuals_per_cluster,
-                             icc,
-                             formula = c("hemming", "hussey_hughes")) {
-  formula <- match.arg(formula)
+                             icc) {
   validate_numeric(steps, arg = "steps", require_positive = TRUE)
   validate_scalar(steps,  arg = "steps")
   if (steps < 2) cli::cli_abort("{.arg steps} must be at least 2.")
@@ -362,18 +366,8 @@ mb_stepped_wedge <- function(steps,
   m       <- individuals_per_cluster
   rho     <- icc
 
-  deff_cluster <- 1 + (m * T_steps - 1) * rho
-  correction_factor <- if (formula == "hemming") {
-    3 * (1 - rho) / (2 * T_steps * (1 - 1 / T_steps^2))
-  } else {
-    # Hussey-Hughes (2007) closed-form correction factor for a
-    # balanced stepped wedge with one cluster crossing per step,
-    # equal cluster size, complete data, no time-by-treatment
-    # interaction. Derived from Hussey & Hughes (2007) eq. (7).
-    T_steps * (1 - rho) /
-      ((T_steps - 1) * (T_steps + 1) / 3 *
-         (1 + (m * T_steps - 1) * rho / T_steps))
-  }
+  deff_cluster      <- 1 + (m * T_steps - 1) * rho
+  correction_factor <- 3 * (1 - rho) / (2 * T_steps * (1 - 1 / T_steps^2))
   deff_sw           <- deff_cluster * correction_factor
   n_total           <- T_steps * clusters_per_step * m
 
@@ -381,7 +375,6 @@ mb_stepped_wedge <- function(steps,
     deff_cluster      = deff_cluster,
     correction_factor = correction_factor,
     deff_sw           = deff_sw,
-    formula           = formula,
     n_total           = n_total
   )
 }
@@ -425,11 +418,17 @@ mb_stepped_wedge <- function(steps,
 #' @references
 #' Hedges, L. V., Hedberg, E. C. (2007). Educational Evaluation
 #' and Policy Analysis 29(1).
+#' <doi:10.3102/0162373707299706>.
 #'
 #' Adams, G., Gulliford, M. C., Ukoumunne, O. C., Eldridge, S.,
 #' Chinn, S., Campbell, M. J. (2004). Patterns of intra-cluster
 #' correlation from primary care research. Statistics in
-#' Medicine 23.
+#' Medicine 23. <doi:10.1002/sim.1764>.
+#'
+#' Campbell, M. K., Mollison, J., Grimshaw, J. M. (2000). Cluster
+#' trials in implementation research: estimation of intracluster
+#' correlation coefficients and sample size. BMJ 321.
+#' <doi:10.1136/bmj.321.7263.778>.
 #'
 #' @family power
 #' @seealso [mb_cluster_design()], [mb_stepped_wedge()].

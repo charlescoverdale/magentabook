@@ -38,6 +38,7 @@
 #' @references
 #' HM Treasury (2020). The Magenta Book: Central Government
 #' Guidance on Evaluation, chapter on theory-based evaluation.
+#' <https://www.gov.uk/government/publications/the-magenta-book>.
 #'
 #' @family theory of change
 #' @seealso [mb_logframe()], [mb_assumptions()].

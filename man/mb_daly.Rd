@@ -42,6 +42,7 @@ Disease. Harvard University Press.
 GBD 2019 Diseases and Injuries Collaborators (2020). Global
 burden of 369 diseases and injuries in 204 countries and
 territories, 1990-2019. The Lancet 396.
+\url{doi:10.1016/S0140-6736(20)30925-9}.
 }
 \seealso{
 \code{\link[=mb_qaly]{mb_qaly()}}.

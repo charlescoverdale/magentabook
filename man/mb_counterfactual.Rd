@@ -37,6 +37,12 @@ mb_counterfactual(
   credibility = "Moderate; selection on observables only"
 )
 }
+\references{
+HM Treasury (2020). The Magenta Book: Central Government
+Guidance on Evaluation, supplementary guidance on
+quasi-experimental and theory-based methods.
+\url{https://www.gov.uk/government/publications/the-magenta-book}.
+}
 \seealso{
 \code{\link[=mb_evaluation_plan]{mb_evaluation_plan()}}.
 

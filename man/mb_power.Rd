@@ -73,9 +73,12 @@ Behavioral Sciences (2nd ed.). Lawrence Erlbaum.
 
 Champely, S. (2020). pwr: Basic Functions for Power Analysis.
 R package version 1.3-0.
+\url{https://CRAN.R-project.org/package=pwr}.
 
-HM Treasury (2020). The Magenta Book, chapter on impact
-evaluation, section on power analysis.
+HM Treasury (2020). The Magenta Book: Central Government
+Guidance on Evaluation. Chapter on impact evaluation, section
+on power analysis.
+\url{https://www.gov.uk/government/publications/the-magenta-book}.
 }
 \seealso{
 \code{\link[=mb_mde]{mb_mde()}}, \code{\link[=mb_sample_size]{mb_sample_size()}}, \code{\link[=mb_cluster_design]{mb_cluster_design()}}.

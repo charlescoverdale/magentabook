@@ -52,10 +52,11 @@
 #' @references
 #' Callaway, B., Sant'Anna, P. H. C. (2021). Difference-in-Differences
 #' with Multiple Time Periods. Journal of Econometrics 225(2).
+#' <doi:10.1016/j.jeconom.2020.12.001>.
 #'
 #' de Chaisemartin, C., D'Haultfoeuille, X. (2020). Two-Way Fixed
 #' Effects Estimators with Heterogeneous Treatment Effects. American
-#' Economic Review 110(9).
+#' Economic Review 110(9). <doi:10.1257/aer.20181169>.
 #'
 #' @family estimators
 #' @seealso [mb_did_2x2()], [mb_its()].

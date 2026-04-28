@@ -50,12 +50,12 @@ mb_its(y, time, intervention_time = 25)
 Bernal, J. L., Cummins, S., Gasparrini, A. (2017). Interrupted
 time series regression for the evaluation of public health
 interventions: a tutorial. International Journal of
-Epidemiology 46(1).
+Epidemiology 46(1). \url{doi:10.1093/ije/dyw098}.
 
 Wagner, A. K., Soumerai, S. B., Zhang, F., Ross-Degnan, D.
 (2002). Segmented regression analysis of interrupted time series
 studies in medication use research. Journal of Clinical Pharmacy
-and Therapeutics 27.
+and Therapeutics 27. \url{doi:10.1046/j.1365-2710.2002.00430.x}.
 }
 \seealso{
 \code{\link[=mb_did_2x2]{mb_did_2x2()}}, \code{\link[=mb_event_study]{mb_event_study()}}.

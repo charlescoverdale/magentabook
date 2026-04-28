@@ -64,9 +64,11 @@ mb_did_2x2(y, treated, post)
 Card, D., Krueger, A. B. (1994). Minimum Wages and Employment:
 A Case Study of the Fast-Food Industry in New Jersey and
 Pennsylvania. American Economic Review 84(4).
+\url{doi:10.1257/aer.84.4.772}.
 
 Cameron, A. C., Miller, D. L. (2015). A Practitioner's Guide to
 Cluster-Robust Inference. Journal of Human Resources 50(2).
+\url{doi:10.3368/jhr.50.2.317}.
 }
 \seealso{
 \code{\link[=mb_its]{mb_its()}}, \code{\link[=mb_event_study]{mb_event_study()}}.

@@ -35,7 +35,10 @@ Suggests:
     officer,
     flextable,
     pwr,
-    sandwich
+    sandwich,
+    swCRTdesign,
+    BCEA,
+    cobalt
 Config/testthat/edition: 3
 URL: https://github.com/charlescoverdale/magentabook
 BugReports: https://github.com/charlescoverdale/magentabook/issues

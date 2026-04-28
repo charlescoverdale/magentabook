@@ -33,6 +33,12 @@ mb_questions(
   priority = c("primary", "secondary")
 )
 }
+\references{
+HM Treasury (2020). The Magenta Book: Central Government
+Guidance on Evaluation, chapters on process, impact, and
+economic evaluation.
+\url{https://www.gov.uk/government/publications/the-magenta-book}.
+}
 \seealso{
 \code{\link[=mb_evaluation_plan]{mb_evaluation_plan()}}, \code{\link[=mb_schedule_table]{mb_schedule_table()}}.
 

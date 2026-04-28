@@ -52,6 +52,12 @@ mb_evaluation_plan(
   governance = "Joint HMT / DfE steering group; peer review by What Works"
 )
 }
+\references{
+HM Treasury (2020). The Magenta Book: Central Government
+Guidance on Evaluation, chapter on planning and managing an
+evaluation.
+\url{https://www.gov.uk/government/publications/the-magenta-book}.
+}
 \seealso{
 \code{\link[=mb_questions]{mb_questions()}}, \code{\link[=mb_counterfactual]{mb_counterfactual()}},
 \code{\link[=mb_stakeholders]{mb_stakeholders()}}, \code{\link[=mb_evaluation_report]{mb_evaluation_report()}}.

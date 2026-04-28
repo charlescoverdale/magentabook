@@ -28,6 +28,7 @@
 #'
 #' HM Treasury (2020). The Magenta Book, chapter on theory-based
 #' evaluation.
+#' <https://www.gov.uk/government/publications/the-magenta-book>.
 #'
 #' @family realist
 #' @seealso [mb_contribution_claim()].

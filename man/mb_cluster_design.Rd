@@ -46,6 +46,7 @@ Randomization Trials in Health Research. Arnold.
 Hedges, L. V., Hedberg, E. C. (2007). Intraclass Correlation
 Values for Planning Group-Randomized Trials in Education.
 Educational Evaluation and Policy Analysis 29(1).
+\url{doi:10.3102/0162373707299706}.
 }
 \seealso{
 \code{\link[=mb_icc_reference]{mb_icc_reference()}}, \code{\link[=mb_stepped_wedge]{mb_stepped_wedge()}},

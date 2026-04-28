@@ -4,13 +4,7 @@
 \alias{mb_stepped_wedge}
 \title{Stepped-wedge design effect}
 \usage{
-mb_stepped_wedge(
-  steps,
-  clusters_per_step,
-  individuals_per_cluster,
-  icc,
-  formula = c("hemming", "hussey_hughes")
-)
+mb_stepped_wedge(steps, clusters_per_step, individuals_per_cluster, icc)
 }
 \arguments{
 \item{steps}{Integer. Number of measurement periods (also called
@@ -24,18 +18,12 @@ cluster per period.}
 
 \item{icc}{Numeric in \verb{[0, 1]}. Intra-class correlation
 coefficient.}
-
-\item{formula}{Character scalar. One of \code{"hemming"} (default,
-the closed form of Woertman et al. 2013 and Hemming et al.
-2015) or \code{"hussey_hughes"} (the Hussey-Hughes 2007 closed
-form). See Details.}
 }
 \value{
 A list with elements \code{deff_cluster} (the within-period
 cluster design effect), \code{correction_factor} (the stepped-wedge
 correction relative to a parallel cluster RCT), \code{deff_sw} (the
-product), \code{n_total} (total observations across the trial), and
-\code{formula} (which closed form was used).
+product), and \code{n_total} (total observations across the trial).
 }
 \description{
 Computes the design effect for a stepped-wedge cluster
@@ -43,32 +31,37 @@ randomised trial relative to an individually-randomised parallel
 design with the same total observations.
 }
 \details{
-Both implemented forms assume a balanced design: equal cluster
-size, equal-period intervals, complete data, no time effects
-beyond a common period mean, and one outcome measurement per
-cluster-period. For non-standard designs use the
-\pkg{swCRTdesign} package or the Hooper-Bourke calculator.
+Implements the closed-form approximation from Hemming et al.
+(2015) BMJ Box 2:
 
-\strong{Hemming/Woertman form} (\code{formula = "hemming"}, default):
+Within-cluster design effect (cluster RCT vs individual RCT
+with same total observations):
 \deqn{\text{DEFF}_c = 1 + (mT - 1)\rho}
-\deqn{\text{CF}_{\text{Hem}} = \frac{3(1-\rho)}{2T(1 - 1/T^2)}}
-\deqn{\text{DEFF}_{sw} = \text{DEFF}_c \cdot \text{CF}_{\text{Hem}}}
 
-\strong{Hussey-Hughes form} (\code{formula = "hussey_hughes"}): replaces
-the Hemming correction factor with the Hussey-Hughes (2007)
-closed form for a balanced stepped wedge with one cluster
-crossing over per step, derived from their equation (7):
-\deqn{\text{CF}_{\text{HH}} = \frac{T(1-\rho)}{(T-1)(T+1)/3 \cdot (1 + (mT-1)\rho/T)}}
-This form makes the within-cluster correlation structure
-explicit and is preferred by Hemming et al. (2015) when \code{rho} is
-large or the number of steps is small. The two forms agree to
-within ~5 percent for moderate \code{rho} (\verb{<= 0.1}) and more than
-four steps; they diverge for high \code{rho} or short trials.
+Stepped-wedge correction relative to a parallel cluster RCT:
+\deqn{\text{CF} = \frac{3(1-\rho)}{2T(1 - 1/T^2)}}
 
-For research-grade stepped-wedge designs (variable cluster
-size, missing data, time-by-treatment interactions, decay of
-within-cluster correlation), use \code{swCRTdesign::swPwr} or
-\code{clusterPower::cps.sw.binary}.
+Combined: \code{DEFF_sw = DEFF_c * CF}. This is a multiplier on the
+variance of the treatment effect compared with an
+individually-randomised design with the same total observations.
+
+Approximation note: this is the closed-form approximation. The
+exact Hussey-Hughes (2007) variance, which \code{swCRTdesign::swPwr}
+computes from the design matrix, can differ by 20-40 percent for
+typical UK evaluation designs. magentabook ships a
+cross-validation test (\code{tests/testthat/test-swcrt-equivalence.R})
+that documents the magnitude of this approximation gap on a
+grid of designs. For production sample-size work, especially
+where rho is high or the number of steps is small, prefer
+\code{swCRTdesign::swPwr} or \code{clusterPower::cps.sw.binary} over this
+function. Use \code{mb_stepped_wedge} for quick comparative
+exploration; use the specialist packages for the number you
+commit to in a published evaluation plan.
+
+Both forms assume a balanced design: equal cluster size,
+equal-period intervals, complete data, no time-by-treatment
+interaction, and one outcome measurement per cluster-period.
+For non-standard designs use the specialist packages above.
 }
 \examples{
 mb_stepped_wedge(
@@ -81,16 +74,18 @@ mb_stepped_wedge(
 \references{
 Hussey, M. A., Hughes, J. P. (2007). Design and analysis of
 stepped wedge cluster randomized trials. Contemporary Clinical
-Trials 28.
+Trials 28(2). \url{doi:10.1016/j.cct.2006.05.007}.
 
 Woertman, W., de Hoop, E., Moerbeek, M., Zuidema, S. U.,
 Gerritsen, D. L., Teerenstra, S. (2013). Stepped wedge designs
 could reduce the required sample size in cluster randomized
-trials. Journal of Clinical Epidemiology 66.
+trials. Journal of Clinical Epidemiology 66(7).
+\url{doi:10.1016/j.jclinepi.2012.12.003}.
 
 Hemming, K., Haines, T. P., Chilton, P. J., Girling, A. J.,
 Lilford, R. J. (2015). The stepped wedge cluster randomised
 trial: rationale, design, analysis, and reporting. BMJ 350.
+\url{doi:10.1136/bmj.h391}.
 }
 \seealso{
 \code{\link[=mb_cluster_design]{mb_cluster_design()}}, \code{\link[=mb_icc_reference]{mb_icc_reference()}}.
