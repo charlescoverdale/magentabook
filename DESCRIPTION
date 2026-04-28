@@ -5,16 +5,16 @@ Authors@R:
     person("Charles", "Coverdale", , "charlesfcoverdale@gmail.com", role = c("aut", "cre"))
 Description: Implements policy evaluation primitives from HM Treasury
     Magenta Book guidance (HM Treasury, 2020): theory of change and
-    logframe construction, evaluation planning and stakeholder mapping,
+    log-frame construction, evaluation planning and stakeholder mapping,
     power and minimum-detectable-effect calculations for randomised
     designs (including cluster and stepped-wedge designs following
-    Hussey and Hughes (2007) <doi:10.1016/j.cct.2006.05.007> and
-    Hemming et al. (2015) <doi:10.1136/bmj.h391>), Maryland Scientific
+    'Hussey' and 'Hughes' (2007) <doi:10.1016/j.cct.2006.05.007> and
+    'Hemming' et al. (2015) <doi:10.1136/bmj.h391>), Maryland Scientific
     Methods Scale ratings, structured confidence ratings, light-weight
     difference-in-differences and interrupted-time-series estimators
-    (Bernal et al. (2017) <doi:10.1093/ije/dyw098>) with cluster-robust
-    standard errors (Cameron and Miller (2015) <doi:10.3368/jhr.50.2.317>),
-    pre-treatment balance checks (Stuart (2010) <doi:10.1214/09-STS313>),
+    ('Bernal' et al. (2017) <doi:10.1093/ije/dyw098>) with cluster-robust
+    standard errors ('Cameron' and 'Miller' (2015) <doi:10.3368/jhr.50.2.317>),
+    pre-treatment balance checks ('Stuart' (2010) <doi:10.1214/09-STS313>),
     and cost-effectiveness analysis (cost per outcome, incremental
     cost-effectiveness ratio, acceptability curves, incremental net
     benefit, quality-adjusted and disability-adjusted life years).
@@ -35,7 +35,6 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
-    greenbook,
     openxlsx,
     officer,
     flextable,

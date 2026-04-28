@@ -10,18 +10,13 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 library(magentabook)
-greenbook_available <- requireNamespace("greenbook", quietly = TRUE)
 ```
 
-The Green Book covers *appraisal* (decide whether to fund a policy). The Magenta
-Book covers *evaluation* (learn whether the funded policy worked). The two
-packages compose cleanly: `greenbook` discounts and rebases cashflows;
-`magentabook` turns the resulting present values into cost-effectiveness
-ratios and net benefits.
+The Green Book covers *appraisal* (decide whether to fund a policy). The Magenta Book covers *evaluation* (learn whether the funded policy worked). The two packages compose cleanly: `greenbook` discounts and rebases cashflows; `magentabook` turns the resulting present values into cost-effectiveness ratios and net benefits.
 
-This vignette compares two delivery options for a hypothetical GBP 1.5m health
-intervention: an enhanced model that costs more upfront but is expected to
-deliver more QALYs.
+This vignette compares two delivery options for a hypothetical GBP 1.5m health intervention: an enhanced model that costs more upfront but is expected to deliver more QALYs.
+
+The vignette uses manual discount-factor arithmetic so it builds cleanly on every R installation. The `greenbook` integration is shown as `eval = FALSE` code blocks at the end; install `greenbook` and run those interactively to see the equivalent calls.
 
 ## Step 1: build the cashflows
 
@@ -40,36 +35,21 @@ qaly_a <- c(0, 80, 80, 80, 80)
 qaly_b <- c(0, 100, 110, 115, 115)
 ```
 
-## Step 2: discount with greenbook
+## Step 2: discount
 
-If `greenbook` is available, use the kinked STPR (3.5 percent over the first
-30 years for a non-health appraisal; or 1.5 percent under the health schedule):
+Health-schedule kinked STPR uses 1.5 percent for the first 30 years. For this 5-year horizon a constant 1.5 percent annual discount factor is exact:
 
-```{r, eval = greenbook_available}
-gb_npv_cost_a <- greenbook::gb_npv(-cost_a, schedule = "health")
-gb_npv_cost_b <- greenbook::gb_npv(-cost_b, schedule = "health")
+```{r}
+r  <- 0.015
+df <- 1 / (1 + r)^years
 
-gb_npv_qaly_a <- greenbook::gb_npv(qaly_a, schedule = "health")
-gb_npv_qaly_b <- greenbook::gb_npv(qaly_b, schedule = "health")
-
-# Convert to absolute (positive) PV costs
-pv_cost_a <- abs(gb_npv_cost_a)
-pv_cost_b <- abs(gb_npv_cost_b)
+pv_cost_a <- sum(cost_a * df)
+pv_cost_b <- sum(cost_b * df)
+pv_qaly_a <- sum(qaly_a * df)
+pv_qaly_b <- sum(qaly_b * df)
 
 c(pv_cost_a = pv_cost_a, pv_cost_b = pv_cost_b)
-c(pv_qaly_a = gb_npv_qaly_a, pv_qaly_b = gb_npv_qaly_b)
-```
-
-```{r, include = FALSE}
-# Fallback values for when greenbook is not installed (vignette must still build)
-if (!greenbook_available) {
-  # Approximate health-schedule discounting at r = 0.015
-  df <- 1 / (1 + 0.015)^(0:4)
-  pv_cost_a   <- sum(cost_a * df)
-  pv_cost_b   <- sum(cost_b * df)
-  gb_npv_qaly_a <- sum(qaly_a * df)
-  gb_npv_qaly_b <- sum(qaly_b * df)
-}
+c(pv_qaly_a = pv_qaly_a, pv_qaly_b = pv_qaly_b)
 ```
 
 ## Step 3: cost-effectiveness with magentabook
@@ -77,8 +57,8 @@ if (!greenbook_available) {
 Plain cost per QALY for each option:
 
 ```{r}
-cea_a <- mb_cea(cost = pv_cost_a, effect = gb_npv_qaly_a, label = "Status quo")
-cea_b <- mb_cea(cost = pv_cost_b, effect = gb_npv_qaly_b, label = "Enhanced")
+cea_a <- mb_cea(cost = pv_cost_a, effect = pv_qaly_a, label = "Status quo")
+cea_b <- mb_cea(cost = pv_cost_b, effect = pv_qaly_b, label = "Enhanced")
 cea_a
 cea_b
 ```
@@ -87,20 +67,18 @@ Incremental analysis (B vs A):
 
 ```{r}
 icer <- mb_icer(
-  cost_a   = pv_cost_a, effect_a = gb_npv_qaly_a,
-  cost_b   = pv_cost_b, effect_b = gb_npv_qaly_b,
+  cost_a   = pv_cost_a, effect_a = pv_qaly_a,
+  cost_b   = pv_cost_b, effect_b = pv_qaly_b,
   label_a  = "Status quo", label_b  = "Enhanced"
 )
 icer
 ```
 
-The dominance flag tells us which quadrant of the cost-effectiveness plane the
-enhanced option sits in.
+The dominance flag tells us which quadrant of the cost-effectiveness plane the enhanced option sits in.
 
 ## Step 4: net benefit at standard willingness-to-pay thresholds
 
-NICE's reference WTP for a QALY is GBP 20k-30k. The cross-government Magenta
-Book equivalent is GBP 70k per QALY. Compute incremental net benefit at each:
+NICE's reference WTP for a QALY is GBP 20k-30k. The cross-government Magenta Book equivalent is GBP 70k per QALY. Compute incremental net benefit at each:
 
 ```{r}
 sapply(
@@ -113,10 +91,7 @@ Positive INB means the option is cost-effective at that WTP.
 
 ## Step 5: probabilistic sensitivity
 
-Real evaluations carry uncertainty in both costs and effects. Suppose a
-probabilistic sensitivity analysis (e.g. Monte-Carlo over an underlying
-trial's posterior) gives sampled draws of the incremental cost and
-incremental effect:
+Real evaluations carry uncertainty in both costs and effects. Suppose a probabilistic sensitivity analysis (e.g. Monte-Carlo over an underlying trial's posterior) gives sampled draws of the incremental cost and incremental effect:
 
 ```{r}
 set.seed(20260427)
@@ -131,10 +106,7 @@ ceac <- mb_ceac(
 ceac
 ```
 
-Each row is the probability that the enhanced option is cost-effective at the
-corresponding WTP. The CEAC is the standard cost-effectiveness uncertainty
-visualisation; pipe `ceac$wtp` and `ceac$prob_cost_effective` to your
-plotting library of choice.
+Each row is the probability that the enhanced option is cost-effective at the corresponding WTP. The CEAC is the standard cost-effectiveness uncertainty visualisation.
 
 ## Step 6: report
 
@@ -170,18 +142,26 @@ report <- mb_evaluation_report(
 report
 ```
 
-Export the bundle to LaTeX for inclusion in a one-page committee paper:
+## Composing with greenbook
 
-```{r}
-cat(mb_to_latex(report, caption = "Enhanced pathway evaluation summary"))
+The example above used direct discount-factor arithmetic so the vignette builds without optional dependencies. In production, install `greenbook` from CRAN and use its primitives for the appraisal-stage discounting. The pattern looks like:
+
+```{r, eval = FALSE}
+# Same cashflows, discounted via greenbook's kinked STPR
+
+pv_cost_a <- abs(greenbook::gb_npv(-cost_a, schedule = "health"))
+pv_cost_b <- abs(greenbook::gb_npv(-cost_b, schedule = "health"))
+pv_qaly_a <- greenbook::gb_npv(qaly_a, schedule = "health")
+pv_qaly_b <- greenbook::gb_npv(qaly_b, schedule = "health")
+
+# Identical magentabook calls from here on
+cea_a <- mb_cea(pv_cost_a, pv_qaly_a, label = "Status quo")
+cea_b <- mb_cea(pv_cost_b, pv_qaly_b, label = "Enhanced")
+icer  <- mb_icer(pv_cost_a, pv_qaly_a, pv_cost_b, pv_qaly_b)
+
+# Long-horizon appraisals see the kink: STPR steps from 3.5 percent
+# (or 1.5 percent on health) down through 1.0 percent at year 300.
+# Manual discount factors don't capture that; greenbook does.
 ```
 
-## Why this composition matters
-
-By the time a Magenta Book evaluation is asked to compute a cost-effectiveness
-ratio, the cashflows are usually nominal and unaligned with the appraisal-stage
-price base. Without `greenbook`, the analyst hand-discounts in a spreadsheet
-and the audit trail is fragile. With both packages loaded, the appraisal-stage
-discount factors and the evaluation-stage cost-effectiveness primitives draw
-from the same vintage-tagged parameter tables, and the entire chain is testable
-R code.
+Why compose the two packages: by the time a Magenta Book evaluation is asked to compute a cost-effectiveness ratio, the cashflows are usually nominal and unaligned with the appraisal-stage price base. With `greenbook` loaded, the appraisal-stage discount factors and the evaluation-stage cost-effectiveness primitives draw from the same vintage-tagged parameter tables, and the entire chain is testable R code.
