@@ -265,8 +265,3 @@ Report bugs or request features at [GitHub Issues](https://github.com/charlescov
 ## Keywords
 
 policy-evaluation, magenta-book, hm-treasury, theory-of-change, logframe, evaluation-design, power-analysis, sample-size, minimum-detectable-effect, cluster-rct, stepped-wedge, intra-class-correlation, maryland-sms, scientific-methods-scale, what-works, confidence-rating, cost-effectiveness, icer, ceac, qaly, daly, difference-in-differences, interrupted-time-series, event-study, realist-evaluation, contribution-analysis, cabinet-office-evaluation-task-force
-
-
-## Licence
-
-MIT (c) 2026 Charles Coverdale.
