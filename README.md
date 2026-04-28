@@ -136,11 +136,46 @@ mb_data_versions()
 | Dataset | Source | Notes |
 |---|---|---|
 | Maryland SMS rubric | Sherman et al. (1997); Magenta Book (2020) | 1-5 rubric: design examples, causal inference, typical uses |
-| Confidence rubric | Magenta Book (2020) Annex A; What Works Network | 3-level rubric: evidence strength, methodological quality, generalisability |
+| Confidence rubric | Synthesis across What Works Centre traditions | 3-level rubric: evidence strength, methodological quality, generalisability |
 | ICC reference values | Hedges & Hedberg (2007); Adams et al. (2004); Campbell et al. (2000); EEF / DfE / DWP / MHCLG / MoJ | Reference low / central / high ICCs across UK policy domains |
 | Question taxonomy | Magenta Book (2020) | 19 canonical evaluation questions tagged by type and method |
 
 All datasets are refreshed via the scripts in `data-raw/`. Vintages are visible via `mb_data_versions()`.
+
+
+## Bundled rubrics: provenance
+
+Decision-grade use depends on knowing what is a direct quotation and what is a researcher synthesis. magentabook is explicit about this:
+
+| Bundled item | Status | What is verbatim | What is magentabook synthesis |
+|---|---|---|---|
+| **Maryland SMS levels 1-5** | Verbatim numeric scale | The five-level structure is direct from Sherman et al. (1997) | Word labels (Weakest / Weak / Moderate / Strong / Strongest) follow What Works UK / EEF convention. The design-examples and typical-use columns are practitioner-oriented synthesis. |
+| **Magenta Book confidence rubric** | Synthesis | The three-level high / medium / low structure aligns with the Magenta Book (2020) supplementary value-for-money framing | The full rubric is *not* a direct quotation from the Magenta Book. It is synthesised from EEF (5 padlocks), Early Intervention Foundation (Foundation Standards), College of Policing (1-5 scale), and Justice Data Lab (red / amber / green) confidence traditions. |
+| **ICC reference values** | Mixed | Each row carries a `value_source` flag: `"table_quote"` for direct extraction with table number, `"central_estimate"` for researcher synthesis within the published range. | At v0.1.0 every row is `central_estimate`. Future versions will upgrade individual rows to `table_quote` as exact citations are added. Always compute domain-specific ICCs from baseline data before relying on these in a published power calculation. |
+| **Question taxonomy** | Verbatim structure | The four types (process, impact, economic, value-for-money) and their canonical questions are from Magenta Book (2020) chapters | Sub-types (e.g. "attribution", "fidelity") are conventional categories used across HMG evaluation practice. |
+
+Practitioner rule: use the *structure* of the bundled rubrics with confidence; substitute your project-specific *content* (rubric values, ICC estimates) where decision-grade reporting requires it.
+
+
+## Cross-validation
+
+The arithmetic primitives are cross-validated against the canonical
+reference implementations on every `R CMD check` (when the optional
+packages are installed):
+
+- **Power and sample size** vs `pwr` (`pwr.t.test`, `pwr.2p.test`):
+  agreement within ~2-3 percentage points of power, ~5 per arm on
+  required N. Discrepancy reflects magentabook's normal-approximation
+  vs `pwr`'s noncentral t.
+- **Cluster-robust SEs** in `mb_did_2x2` vs `sandwich::vcovCL` with
+  `type = "HC1"`: agreement to within `1e-6`. The CR1 estimator and
+  the Stata-style finite-sample correction `(G/(G-1)) * (N-1)/(N-K)`
+  are implemented identically.
+- **DiD point estimate** vs `lm(y ~ treated * post)$coefficients`:
+  agreement to floating-point precision.
+
+See `tests/testthat/test-pwr-equivalence.R` and
+`tests/testthat/test-sandwich-equivalence.R` for the test grid.
 
 
 ## What this package is not

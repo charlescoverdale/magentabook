@@ -15,7 +15,7 @@ returns the entire reference table.}
 \value{
 A data frame with columns \code{domain}, \code{outcome},
 \code{unit_of_clustering}, \code{icc_low}, \code{icc_central}, \code{icc_high},
-\code{source}, \code{notes}.
+\code{value_source}, \code{source}, \code{notes}.
 }
 \description{
 Returns bundled reference ICC values for common UK policy
@@ -27,6 +27,23 @@ Values are \emph{reference} ICCs for planning purposes only.
 Wherever feasible, evaluators should compute domain-specific
 ICCs from baseline data before finalising sample size
 calculations.
+
+Each row carries a \code{value_source} flag:
+\itemize{
+\item \code{"table_quote"}: direct extraction of a specific row or value
+from a published table (cited table number in the \code{source}
+field).
+\item \code{"central_estimate"}: researcher synthesis of a plausible
+central value within the published range, used as a
+practitioner default in the absence of domain-specific
+baseline data.
+}
+
+At v0.1.0 every bundled row is \code{central_estimate}. Future
+versions will upgrade individual rows to \code{table_quote} as exact
+table-level citations are added. Treat the bundled values as a
+planning prior; verify against your own baseline ICC before
+relying on them in a published power calculation.
 }
 \examples{
 mb_icc_reference()

@@ -30,12 +30,21 @@
 #' ITS, synthetic control).
 #' Level 5: random assignment.
 #'
+#' Provenance note: numeric levels 1-5 are direct from Sherman et
+#' al. (1997). The word labels (Weakest / Weak / Moderate / Strong
+#' / Strongest) follow What Works UK / Education Endowment
+#' Foundation convention and are not direct quotations from the
+#' original report. The design-examples and typical-use columns of
+#' the bundled rubric are magentabook synthesis, intended as a
+#' practitioner reference rather than a verbatim reproduction.
+#'
 #' @references
 #' Sherman, L. W., Gottfredson, D. C., MacKenzie, D. L., Eck, J.,
 #' Reuter, P., Bushway, S. (1997). Preventing Crime: What Works,
 #' What Doesn't, What's Promising. Report to the US Congress.
 #'
-#' HM Treasury (2020). The Magenta Book, Annex A.
+#' HM Treasury (2020). The Magenta Book: Central Government
+#' Guidance on Evaluation.
 #'
 #' @family Maryland SMS
 #' @seealso [mb_sms_explain()], [mb_confidence()].

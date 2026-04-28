@@ -354,13 +354,28 @@ mb_stepped_wedge <- function(steps,
 #'
 #' @return A data frame with columns `domain`, `outcome`,
 #'   `unit_of_clustering`, `icc_low`, `icc_central`, `icc_high`,
-#'   `source`, `notes`.
+#'   `value_source`, `source`, `notes`.
 #'
 #' @details
 #' Values are *reference* ICCs for planning purposes only.
 #' Wherever feasible, evaluators should compute domain-specific
 #' ICCs from baseline data before finalising sample size
 #' calculations.
+#'
+#' Each row carries a `value_source` flag:
+#' - `"table_quote"`: direct extraction of a specific row or value
+#'   from a published table (cited table number in the `source`
+#'   field).
+#' - `"central_estimate"`: researcher synthesis of a plausible
+#'   central value within the published range, used as a
+#'   practitioner default in the absence of domain-specific
+#'   baseline data.
+#'
+#' At v0.1.0 every bundled row is `central_estimate`. Future
+#' versions will upgrade individual rows to `table_quote` as exact
+#' table-level citations are added. Treat the bundled values as a
+#' planning prior; verify against your own baseline ICC before
+#' relying on them in a published power calculation.
 #'
 #' @references
 #' Hedges, L. V., Hedberg, E. C. (2007). Educational Evaluation

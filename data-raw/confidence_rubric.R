@@ -1,7 +1,16 @@
 # Build inst/extdata/confidence_rubric.csv
 #
-# Source: HM Treasury Magenta Book (2020) Annex A; What Works Centre
-# confidence-rating guidance. Three-level rubric (high / medium / low).
+# Provenance: this rubric is NOT a direct quotation from the
+# Magenta Book. It is a magentabook synthesis of cross-What-Works-
+# Centre confidence-rating traditions:
+#   - Education Endowment Foundation (5 padlocks)
+#   - Early Intervention Foundation (Foundation Standards)
+#   - College of Policing (1-5 scale)
+#   - Justice Data Lab (red / amber / green)
+#
+# The three-level high / medium / low structure is designed for HMG
+# decision-grade reporting and aligns with the value-for-money
+# framing of the Magenta Book (2020) supplementary guidance.
 
 confidence_rubric <- data.frame(
   rating = c("high", "medium", "low"),

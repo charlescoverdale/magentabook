@@ -46,9 +46,16 @@ free-text rationale.
 \details{
 Magenta Book confidence ratings translate evidence into
 decision-grade summaries for ministers and senior officials. The
-rubric is bundled (see \code{\link[=mb_schedule_table]{mb_schedule_table()}} with table
-\code{"confidence"}) and loosely follows the What Works Network
-confidence-rating taxonomy.
+bundled rubric (see \code{\link[=mb_schedule_table]{mb_schedule_table()}} with table
+\code{"confidence"}) is \emph{not a direct quotation from the Magenta
+Book}. It is a magentabook synthesis of cross-What-Works-Centre
+confidence-rating traditions: Education Endowment Foundation
+(5 padlocks), Early Intervention Foundation (Foundation
+Standards), College of Policing (1-5 scale), and the Justice
+Data Lab (red / amber / green). The three-level high / medium /
+low structure is designed for HMG decision-grade reporting and
+aligns with the value-for-money framing of the Magenta Book
+(2020) supplementary guidance.
 }
 \examples{
 mb_confidence(
@@ -61,7 +68,14 @@ mb_confidence(
 )
 }
 \references{
-HM Treasury (2020). The Magenta Book, Annex A.
+HM Treasury (2020). The Magenta Book: Central Government
+Guidance on Evaluation. Supplementary guidance on value for
+money.
+
+Education Endowment Foundation. Padlock evidence ratings.
+
+Early Intervention Foundation (2021). Foundation Standards of
+Evidence.
 }
 \seealso{
 \code{\link[=mb_confidence_summary]{mb_confidence_summary()}}, \code{\link[=mb_sms_rate]{mb_sms_rate()}}.

@@ -1,8 +1,13 @@
 # Build inst/extdata/sms_rubric.csv
 #
-# Source: Sherman et al. (1997) Maryland Scientific Methods Scale, as
-# adopted by the HM Treasury Magenta Book (2020) and the What Works
-# Network. Five levels of methodological rigour for impact evaluation.
+# Provenance:
+#   - Numeric levels 1-5 are direct from Sherman et al. (1997)
+#     Preventing Crime: What Works, What Doesn't, What's Promising.
+#   - Word labels (Weakest / Weak / Moderate / Strong / Strongest)
+#     follow What Works UK / Education Endowment Foundation
+#     convention and are not direct quotations from Sherman et al.
+#   - The "design_examples" and "typical_uses" columns are
+#     magentabook synthesis, intended as a practitioner reference.
 #
 # Re-run this script to regenerate the bundled CSV. The CSV is
 # checked in so that magentabook ships without this script.
