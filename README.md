@@ -1,10 +1,6 @@
 # magentabook
 
-<!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/magentabook)](https://CRAN.R-project.org/package=magentabook)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-<!-- badges: end -->
+[![CRAN status](https://www.r-pkg.org/badges/version/magentabook)](https://CRAN.R-project.org/package=magentabook) [![CRAN downloads](https://cranlogs.r-pkg.org/badges/magentabook)](https://cran.r-project.org/package=magentabook) [![Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/magentabook)](https://CRAN.R-project.org/package=magentabook) [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Policy-evaluation primitives from the HM Treasury Magenta Book, in R.
 
@@ -54,7 +50,8 @@ The package is pure computation: no network calls, no API keys. Bundled rubric a
 ## Installation
 
 ```r
-# install.packages("magentabook")  # not yet on CRAN
+install.packages("magentabook")
+
 # Development version:
 # install.packages("remotes")
 remotes::install_github("charlescoverdale/magentabook")
