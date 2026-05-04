@@ -203,9 +203,9 @@ grids.
 The light-weight implementations of `mb_did_2x2`, `mb_its`, and `mb_event_study` are deliberately canonical: they are useful for sanity checks, teaching, and headline estimates, and each docstring points to the right specialist package for production work.
 
 
-## Companion package
+## Related packages
 
-`greenbook` provides UK Green Book appraisal primitives (STPR, NPV, optimism bias, distributional weights, METB, DESNZ carbon values, VPF, WELLBYs). Together, `greenbook` + `magentabook` cover the full appraisal-to-evaluation spine.
+`greenbook` is the companion appraisal package. Together, `greenbook` + `magentabook` cover the full appraisal-to-evaluation spine.
 
 ```r
 # Appraisal: discount future net benefits to present value
@@ -217,6 +217,14 @@ magentabook::mb_icer(cost_a = 1e6, effect_a = 200,
 ```
 
 See the vignette "Cost-effectiveness with magentabook and greenbook" for a worked end-to-end example.
+
+| Package | Description |
+|---|---|
+| [`greenbook`](https://github.com/charlescoverdale/greenbook) | HM Treasury Green Book CBA primitives (STPR, NPV, optimism bias, distributional weights, METB, DESNZ carbon, VPF, WELLBYs) |
+| [`ivcheck`](https://github.com/charlescoverdale/ivcheck) | IV diagnostics (LATE-assumption falsification for evaluation impact estimates) |
+| [`predictset`](https://github.com/charlescoverdale/predictset) | Conformal prediction intervals (uncertainty around evaluation point estimates) |
+| [`ons`](https://github.com/charlescoverdale/ons) | UK Office for National Statistics data (evaluation outcome data) |
+| [`hmrc`](https://github.com/charlescoverdale/hmrc) | HM Revenue & Customs tax data (fiscal-impact evaluations) |
 
 
 ## References
